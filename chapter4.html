@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chapter 4 - E-Commerce and E-Governance</title>
+    <style>
+        /* Premium Lightest Orange / Peach Theme */
+        :root {
+            --bg-page: #FFF9F5; 
+            --nav-bg: rgba(255, 255, 255, 0.85); 
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --orange-soft: #FFF0E6; 
+            --divider: rgba(255, 107, 0, 0.15);
+            --correct-bg: #F0FAF0;
+            --correct-text: #228B22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.5;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--orange-primary);
+            letter-spacing: -0.01em;
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2.5px;
+            width: 100%;
+            background-color: var(--orange-primary);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: left center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 75px;
+            right: 20px;
+            width: 250px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--divider);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transform-origin: top right;
+            transform: scale(0.9) translateY(-15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+        }
+
+        .mobile-menu.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:active, .mobile-menu a:hover {
+            background-color: var(--orange-light);
+            color: var(--orange-primary);
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .animated-section {
+            opacity: 0;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 18px;
+            border: 1px solid var(--divider);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .page-header h2 {
+            font-size: 16px;
+            color: var(--orange-primary);
+            font-weight: 600;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-divider {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--orange-primary);
+            margin: 50px 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px dashed var(--divider);
+            padding-bottom: 10px;
+        }
+
+        /* Question Cards */
+        .qa-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--divider);
+            overflow: hidden;
+        }
+
+        .qa-card h3 {
+            font-size: 20px;
+            color: var(--orange-primary);
+            border-bottom: 1px solid var(--divider);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qa-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(0,0,0,0.06);
+        }
+
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .a-text {
+            background-color: var(--correct-bg);
+            color: var(--correct-text);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 4px solid var(--correct-text);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .ans-badge {
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-right: 5px;
+        }
+
+        /* MCQ Options Grid */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-option {
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .mcq-option span {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 8px;
+        }
+
+        /* Match the Following Layout */
+        .match-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .match-left {
+            font-weight: 700;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .match-icon {
+            color: var(--orange-primary);
+            font-size: 20px;
+            margin: 0 15px;
+        }
+
+        .match-right {
+            color: var(--text-muted);
+            flex: 1.5;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--divider);
+            font-weight: 500;
+            margin-top: auto;
+            background-color: var(--card-bg);
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 24px; }
+            .match-container { flex-direction: column; text-align: center; gap: 8px; }
+            .match-right { text-align: center; }
+            .match-icon { transform: rotate(90deg); margin: 5px 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Blurred Sticky Navigation Header -->
+    <nav>
+        <div class="nav-brand">Information Technology</div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Floating iOS Popup Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" onclick="toggleMenu()">Syllabus & Pattern</a>
+            <a href="chapter1.html" onclick="toggleMenu()">Chapter 1</a>
+            <a href="chapter2.html" onclick="toggleMenu()">Chapter 2</a>
+            <a href="chapter4.html" style="color: var(--orange-primary);" onclick="toggleMenu()">Chapter 4</a>
+            <a href="paper1.html" onclick="toggleMenu()">Practice Paper 1</a>
+            <a href="paper2.html" onclick="toggleMenu()">Practice Paper 2</a>
+            <a href="paper3.html" onclick="toggleMenu()">Practice Paper 3</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        
+        <div class="page-header animated-section delay-1">
+            <h1>Chapter 4: E-Commerce and E-Governance</h1>
+            <h2>Comprehensive Textbook Exercises</h2>
+        </div>
+
+        <!-- ================= EXERCISES SECTION ================= -->
+        
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks</h3>
+            <div class="qa-item">
+                <div class="q-text">1. E-Commerce's scope is ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Global</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Search and Negotiate are the part of ______ phase of trade cycle.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Pre-Sales</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. The ______ phase consist of Order and Delivery.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Execution</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. E-wallet is a type of ______ account in which a user can store his/her money for any future online transaction.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> pre-paid</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. EDI is ______ exchange of information.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> paperless</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. The ______ type of e-governance refers to the government services which enable citizens to get access to wide variety of public services.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> G2C (Government-to-Citizen)</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. The e-governance which provides safe and secure inter-relationship between domestic or foreign government is ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> G2G (Government-to-Government)</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 State whether True or False</h3>
+            <div class="qa-item">
+                <div class="q-text">1. C2C type of E-commerce deals with Business and Customer.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. The lack of a personal touch can be a disadvantage for many types of services and products in E-commerce.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Checking the balance of holiday is an example of G2C.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. E-commerce provides more options to compare and select the cheaper and better options.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. M-commerce can be used through desktop computer.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.3 MCQ (Single Correct Answer)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Invoice and payment are included in ______ phase of trade cycle.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> Presale</div>
+                    <div class="mcq-option"><span>b)</span> execution</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> settlement</div>
+                    <div class="mcq-option"><span>d)</span> After sale</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) settlement</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. License renewal is an example of ______ e-governance.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> G2C</div>
+                    <div class="mcq-option"><span>b)</span> G2B</div>
+                    <div class="mcq-option"><span>c)</span> G2G</div>
+                    <div class="mcq-option"><span>d)</span> G2E</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) G2C</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Encryption consist of two processes ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> encryption</div>
+                    <div class="mcq-option"><span>b)</span> signature</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> decryption</div>
+                    <div class="mcq-option"><span>d)</span> digitization</div>
+                    <div class="mcq-option"><span>e)</span> security</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) encryption, c) decryption</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Social commerce is a subset of electronic commerce that involves social media like ______ & ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> Facebook</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> Instagram</div>
+                    <div class="mcq-option"><span>c)</span> gmail</div>
+                    <div class="mcq-option"><span>d)</span> hardware</div>
+                    <div class="mcq-option"><span>e)</span> software</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Facebook, b) Instagram</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.5 Match the Following</h3>
+            
+            <div class="match-container">
+                <div class="match-left">1. M-commerce</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">c) E-bill payment</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">2. Cipher Text</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">a) Coded form of data</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">3. EDI</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">d) Paperless exchange of information</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">4. Wholesaler-to-Retailer</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">b) B2B</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">5. License renewal</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">f) G2C</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">6. Online facility to employees like leave</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">g) G2E</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">7. Government agencies share same database</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">e) G2G</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.6 Answer in brief (Textbook Questions)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Explain phases of trade cycle.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> A general trade cycle consists of four phases: 1) Pre-Sales (Search and Negotiate), 2) Execution (Order and Delivery), 3) Settlement (Invoice and Payment), and 4) After-Sales (Warranty and Maintenance).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Explain M-Commerce.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Mobile commerce (M-Commerce) is the buying and selling of goods and services through wireless handheld devices such as smartphones and tablets. Applications include mobile banking, ticket booking, and e-bill payments.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Describe process of encryption.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Encryption converts Plain text (readable form of data) into Cipher Text (coded, non-readable form) to protect sensitive information being sent over the internet. Decryption is the opposite process. It has two types: Symmetric (Private-Key) and Asymmetric (Public-Key).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. What is E-governance.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> E-governance is the implementation of information technology in the government processes and functions to deliver SMART (Simple, Moral, Accessible, Responsive, Transparent) government services to citizens and businesses.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. List out advantages of E-commerce.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Advantages include: Global scope, Electronic transactions, Cost Saving, Anytime shopping (24x7), No intermediaries, and better delivery of Public services.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. Which are the different types of e-governance?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The four types are: G2C (Government-to-Citizen), G2B (Government-to-Business), G2G (Government-to-Government), and G2E (Government-to-Employee).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. State two examples of G2E services.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Applying for leave online, reviewing salary payment records, and checking the balance of holiday.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">8. Write any four advantages of e-governance.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Four advantages are: 1) Reduced corruption, 2) High transparency, 3) Increased convenience, and 4) Reduction in overall cost.</div>
+            </div>
+        </div>
+
+        <hr style="border:0; height:1px; background:var(--divider); margin: 50px 0;">
+
+        <!-- ================= SECTION 2: PREDICTIVE PRACTICE PAPER ================= -->
+        <div class="section-divider">Predictive Practice Paper</div>
+        <div class="page-header animated-section delay-1" style="background-color: #FFF0E0; border-color: var(--orange-primary);">
+            <h1 style="color: var(--orange-primary);">Chapter 4 Only Test</h1>
+            <h2 style="color: var(--text-main);">Max Marks: 50 | Time: 2 Hrs</h2>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. E-Commerce became possible in 1991 when the ______ was opened to commercial use.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Internet</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. The ______ phase consists of Order and Delivery.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Execution</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. ______ helps the government to deliver public services at a reduced cost.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> E-commerce (or E-governance)</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. G2B stands for Government-to-______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Business</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Encryption converts Plain text into ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Cipher Text</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 True or False [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. E-commerce scope is only local.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. A digital signature guarantees the authenticity of an electronic document.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. B2B stands for Business to Buyer.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. An E-wallet is protected with a password.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. G2G provides safe and secure inter-relationship between domestic or foreign governments.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.3 MCQ (Single Correct Answer) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Trade cycle 'Search and Negotiate' belong to which phase?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Pre-Sales</div>
+                    <div class="mcq-option">b) Execution</div>
+                    <div class="mcq-option">c) Settlement</div>
+                    <div class="mcq-option">d) After-Sales</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Pre-Sales</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Buying and selling through smartphones is called:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) E-commerce</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) M-commerce</div>
+                    <div class="mcq-option">c) Social commerce</div>
+                    <div class="mcq-option">d) EDI</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) M-commerce</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Which phase consists of Invoice and Payment?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Pre-sale</div>
+                    <div class="mcq-option">b) Execution</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Settlement</div>
+                    <div class="mcq-option">d) After-sales</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) Settlement</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. License renewal is an example of:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) G2C</div>
+                    <div class="mcq-option">b) G2B</div>
+                    <div class="mcq-option">c) G2G</div>
+                    <div class="mcq-option">d) G2E</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) G2C</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. What does EDI stand for?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Electronic Data Information</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Electronic Data Interchange</div>
+                    <div class="mcq-option">c) Electrical Data Interchange</div>
+                    <div class="mcq-option">d) Electronic Device Interchange</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Electronic Data Interchange</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. SMART governance stands for Simple, Moral, Accessible, Responsive and:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Timely</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Transparent</div>
+                    <div class="mcq-option">c) Technical</div>
+                    <div class="mcq-option">d) Total</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Transparent</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. The setup cost of E-commerce is generally:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Low</div>
+                    <div class="mcq-option">b) Very cheap</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Quite expensive</div>
+                    <div class="mcq-option">d) Free</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) Quite expensive</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">8. Conversion of Cipher text into Plain text is called:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Encryption</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Decryption</div>
+                    <div class="mcq-option">c) Digital Signature</div>
+                    <div class="mcq-option">d) Digital Certificate</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Decryption</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">9. Which E-commerce type involves consumers selling to consumers?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) B2C</div>
+                    <div class="mcq-option">b) C2B</div>
+                    <div class="mcq-option">c) B2B</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) C2C</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) C2C</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">10. A Digital Certificate is also known as:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Public key certificate</div>
+                    <div class="mcq-option">b) Private key certificate</div>
+                    <div class="mcq-option">c) Secret key certificate</div>
+                    <div class="mcq-option">d) Plain text certificate</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Public key certificate</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Encryption consists of two processes:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) decryption</div>
+                    <div class="mcq-option">b) execution</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) encryption</div>
+                    <div class="mcq-option">d) negotiation</div>
+                    <div class="mcq-option">e) delivery</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) decryption, c) encryption</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Two types of encryption are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Symmetric</div>
+                    <div class="mcq-option">b) Public</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Asymmetric</div>
+                    <div class="mcq-option">d) Open</div>
+                    <div class="mcq-option">e) Closed</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Symmetric, c) Asymmetric</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Phases of a trade cycle include:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Pre-Sales</div>
+                    <div class="mcq-option">b) G2C</div>
+                    <div class="mcq-option">c) B2B</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Settlement</div>
+                    <div class="mcq-option">e) EDI</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Pre-Sales, d) Settlement</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Social commerce uses networking websites such as:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Facebook</div>
+                    <div class="mcq-option">b) Google Pay</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Instagram</div>
+                    <div class="mcq-option">d) NEFT</div>
+                    <div class="mcq-option">e) BHIM</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Facebook, c) Instagram</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Which of the following are types of E-governance?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) G2C</div>
+                    <div class="mcq-option">b) B2B</div>
+                    <div class="mcq-option">c) C2C</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) G2E</div>
+                    <div class="mcq-option">e) B2C</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) G2C, d) G2E</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.5 MCQ (Three Correct Answers) [6 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Advantages of E-governance include:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Reduced corruption</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) High transparency</div>
+                    <div class="mcq-option">c) High setup cost</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Increased convenience</div>
+                    <div class="mcq-option">e) Lack of personal touch</div>
+                    <div class="mcq-option">f) Goods delivery problems</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Reduced corruption, b) High transparency, d) Increased convenience</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Common payment modes in E-commerce are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Credit Cards</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Mobile Payments</div>
+                    <div class="mcq-option">c) EDI</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) E-wallets</div>
+                    <div class="mcq-option">e) G2B</div>
+                    <div class="mcq-option">f) Cipher Text</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Credit Cards, b) Mobile Payments, d) E-wallets</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.6 Match the Following [4 Marks]</h3>
+            
+            <div class="match-container">
+                <div class="match-left">1. M-commerce</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">c) Smartphones and tablets</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">2. Cipher Text</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">a) Coded form of data</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">3. B2C</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">d) Amazon, Flipkart</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">4. G2E</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">b) Online leave application</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.7 Answer the Following (Any 5) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. What is E-commerce?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> E-Commerce can be broadly defined as the process of buying and selling of goods or services using an electronic medium such as the Internet. It is a paperless exchange of business information.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. List advantages of E-commerce.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Advantages include Global scope, Electronic transactions (less paperwork), Cost Saving, Anytime shopping (24x7), No intermediaries (direct communication), and efficient delivery of Public services.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Explain C2C and C2B models.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> <b>C2C (Consumer to Consumer):</b> Consumers sell their assets (e.g., used cars, renting rooms) to other consumers via a website (e.g., OLX). <b>C2B (Consumer to Business):</b> Consumers provide products or services of value that can be consumed by businesses (e.g., writing a blog for a business).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. What is EDI?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Electronic Data Interchange (EDI) is the electronic interchange of business information using a standardized format. It allows computers of different companies to securely exchange documents like purchase orders and invoices without paper.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Explain the Settlement phase of the Trade Cycle.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The Settlement phase consists of two steps: Invoice and Payment. The customer receives a bill (invoice) for the purchased product, and after confirming the received product, the customer pays for it electronically.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. What is E-governance and state its types?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> E-Governance is the implementation of information technology in government processes to create a Simple, Moral, Accessible, Responsive, and Transparent (SMART) government. Its 4 types are G2C, G2B, G2G, and G2E.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. Describe the process of Encryption and Decryption.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> <b>Encryption:</b> Converts plain text (readable data) into cipher text (coded, non-readable data) to protect it during internet transmission. <b>Decryption:</b> The exact opposite process, converting cipher text back into readable plain text at the destination.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Created by Gagan Nishad
+    </footer>
+
+    <!-- Interactive Navigation Script -->
+    <script>
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Close the menu if user clicks outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

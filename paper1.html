@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Practice Paper 1 - IT Commerce</title>
+    <style>
+        /* Premium Lightest Orange / Peach Theme */
+        :root {
+            --bg-page: #FFF9F5; 
+            --nav-bg: rgba(255, 255, 255, 0.85); 
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --orange-soft: #FFF0E6; 
+            --divider: rgba(255, 107, 0, 0.15);
+            --correct-text: #198038; /* Crisp iOS Green */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--orange-primary);
+            letter-spacing: -0.01em;
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2.5px;
+            width: 100%;
+            background-color: var(--orange-primary);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: left center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 75px;
+            right: 20px;
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--divider);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transform-origin: top right;
+            transform: scale(0.9) translateY(-15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+        }
+
+        .mobile-menu.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:active, .mobile-menu a:hover {
+            background-color: var(--orange-light);
+            color: var(--orange-primary);
+            transform: translateX(5px);
+        }
+
+        /* Main Content Container (No Boxes) */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .animated-section {
+            opacity: 0;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        /* Page Header - Clean Text */
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--orange-primary);
+        }
+
+        .page-header h1 {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .page-header h2 {
+            font-size: 18px;
+            color: var(--orange-primary);
+            font-weight: 600;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .exam-meta {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* Section Headings */
+        .question-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: var(--orange-primary);
+            font-weight: 700;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Clean Question Blocks (No Cards) */
+        .q-block {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .q-block:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        /* Beautiful Clean Answer Text */
+        .a-text {
+            color: var(--correct-text);
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+
+        .a-text::before {
+            content: "✓ Ans:";
+            font-weight: 800;
+            margin-right: 8px;
+            text-transform: uppercase;
+            font-size: 14px;
+            padding-top: 2px;
+        }
+
+        /* MCQ Options Grid - Clean Outline */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-option {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+        }
+
+        .mcq-option span {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 10px;
+            background-color: rgba(0,0,0,0.05);
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        /* Highlight Correct Option */
+        .mcq-option.correct {
+            border: 1px solid var(--correct-text);
+            color: var(--text-main);
+            background-color: rgba(25, 128, 56, 0.05);
+        }
+
+        .mcq-option.correct span {
+            background-color: var(--correct-text);
+            color: #fff;
+        }
+
+        /* Clean Match the Following */
+        .match-row {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed var(--divider);
+        }
+
+        .match-row:last-child {
+            border-bottom: none;
+        }
+
+        .match-left {
+            font-weight: 600;
+            color: var(--text-main);
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .match-icon {
+            color: var(--orange-primary);
+            font-size: 18px;
+            margin: 0 20px;
+            opacity: 0.5;
+        }
+
+        .match-right {
+            color: var(--correct-text);
+            flex: 1.5;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--divider);
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 26px; }
+            .match-row { flex-direction: column; align-items: flex-start; gap: 5px; padding: 12px 0;}
+            .match-icon { display: none; }
+            .match-right { padding-left: 15px; border-left: 2px solid var(--correct-text); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Blurred Sticky Navigation Header -->
+    <nav>
+        <div class="nav-brand">Information Technology</div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Floating iOS Popup Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" onclick="toggleMenu()">Syllabus & Pattern</a>
+            <a href="chapter1.html" onclick="toggleMenu()">Chapter 1</a>
+            <a href="chapter2.html" onclick="toggleMenu()">Chapter 2</a>
+            <a href="chapter4.html" onclick="toggleMenu()">Chapter 4</a>
+            <a href="paper1.html" style="color: var(--orange-primary);" onclick="toggleMenu()">Practice Paper 1</a>
+            <a href="paper2.html" onclick="toggleMenu()">Practice Paper 2</a>
+            <a href="paper3.html" onclick="toggleMenu()">Practice Paper 3</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Flow (No Boxes) -->
+    <main>
+        
+        <div class="page-header animated-section delay-1">
+            <h1>Predictive Practice Paper 1</h1>
+            <h2>Combined: Chapters 1, 2 & 4</h2>
+            <div class="exam-meta">
+                <div>Max Marks: 50</div>
+                <div>Time: 2 Hours</div>
+            </div>
+        </div>
+
+        <!-- ================= Q1: Fill in the blanks ================= -->
+        <div class="question-section animated-section delay-2">
+            <div class="section-title">Q.1 Fill in the blanks (5 Marks)</div>
+            
+            <div class="q-block">
+                <div class="q-text">1. The ______ element creates an inline frame seamlessly.</div>
+                <div class="a-text">&lt;iframe&gt;</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">2. Unpaid search ranking on search engines is nothing but ______ search.</div>
+                <div class="a-text">Organic</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">3. E-wallet is a type of ______ account in which a user can store money for future transactions.</div>
+                <div class="a-text">Pre-paid</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">4. The ______ property is used to set the exact position for an element in CSS.</div>
+                <div class="a-text">position</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">5. Electronic Data Interchange (EDI) is the ______ exchange of business information.</div>
+                <div class="a-text">paperless</div>
+            </div>
+        </div>
+
+        <!-- ================= Q2: True or False ================= -->
+        <div class="question-section animated-section delay-2">
+            <div class="section-title">Q.2 State whether True or False (5 Marks)</div>
+            
+            <div class="q-block">
+                <div class="q-text">1. HTML is an Object Oriented Programming Language.</div>
+                <div class="a-text">False</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">2. Black hat SEO relies on manipulating algorithms to falsely improve website rankings.</div>
+                <div class="a-text">True</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">3. The C2C type of E-commerce deals with transactions between a Business and a Customer.</div>
+                <div class="a-text">False</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">4. A multilevel nested list can easily be created using HTML5 tags.</div>
+                <div class="a-text">True</div>
+            </div>
+            
+            <div class="q-block">
+                <div class="q-text">5. Digital marketing can only be carried out with the help of a physical Portal.</div>
+                <div class="a-text">False</div>
+            </div>
+        </div>
+
+        <!-- ================= Q3: MCQ Single Correct ================= -->
+        <div class="question-section animated-section delay-3">
+            <div class="section-title">Q.3 MCQ - Single Correct Answer (10 Marks)</div>
+
+            <div class="q-block">
+                <div class="q-text">1. Which element is used to create a linking image (image map)?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> &lt;img&gt;</div>
+                    <div class="mcq-option"><span>B</span> &lt;td&gt;</div>
+                    <div class="mcq-option correct"><span>C</span> &lt;map&gt;</div>
+                    <div class="mcq-option"><span>D</span> &lt;usemap&gt;</div>
+                </div>
+                <div class="a-text">&lt;map&gt;</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">2. Which tag is used to embed audio files on Webpages?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> &lt;sound&gt;</div>
+                    <div class="mcq-option correct"><span>B</span> &lt;audio&gt;</div>
+                    <div class="mcq-option"><span>C</span> &lt;video&gt;</div>
+                    <div class="mcq-option"><span>D</span> &lt;embeded&gt;</div>
+                </div>
+                <div class="a-text">&lt;audio&gt;</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">3. SEO techniques that break rules by manipulating Google's algorithm are known as:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Red Hat</div>
+                    <div class="mcq-option"><span>B</span> White Hat</div>
+                    <div class="mcq-option"><span>C</span> Green Hat</div>
+                    <div class="mcq-option correct"><span>D</span> Black Hat</div>
+                </div>
+                <div class="a-text">Black Hat</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">4. To analyze the traffic coming to a website, which tool is commonly used?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> SEOptimer</div>
+                    <div class="mcq-option correct"><span>B</span> Google Analytics</div>
+                    <div class="mcq-option"><span>C</span> Go daddy</div>
+                    <div class="mcq-option"><span>D</span> Amazon</div>
+                </div>
+                <div class="a-text">Google Analytics</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">5. Invoice and payment processing are included in which phase of the trade cycle?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Pre-sale</div>
+                    <div class="mcq-option"><span>B</span> Execution</div>
+                    <div class="mcq-option correct"><span>C</span> Settlement</div>
+                    <div class="mcq-option"><span>D</span> After-sale</div>
+                </div>
+                <div class="a-text">Settlement</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">6. License renewal and paying tax online is an example of which e-governance type?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> G2C</div>
+                    <div class="mcq-option"><span>B</span> G2B</div>
+                    <div class="mcq-option"><span>C</span> G2G</div>
+                    <div class="mcq-option"><span>D</span> G2E</div>
+                </div>
+                <div class="a-text">G2C</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">7. Which character is strictly used to create an ID selector in CSS?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> %</div>
+                    <div class="mcq-option"><span>B</span> $</div>
+                    <div class="mcq-option"><span>C</span> @</div>
+                    <div class="mcq-option correct"><span>D</span> #</div>
+                </div>
+                <div class="a-text">#</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">8. To define a slider for a number between 18 to 50, which form control is used?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> number</div>
+                    <div class="mcq-option"><span>B</span> compare</div>
+                    <div class="mcq-option correct"><span>C</span> range</div>
+                    <div class="mcq-option"><span>D</span> textboxes</div>
+                </div>
+                <div class="a-text">range</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">9. If the speed of displaying the website is slow, it affects which SEO ranking factor?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Technical SEO</div>
+                    <div class="mcq-option"><span>B</span> On-page SEO</div>
+                    <div class="mcq-option"><span>C</span> Off-page SEO</div>
+                    <div class="mcq-option"><span>D</span> Load page SEO</div>
+                </div>
+                <div class="a-text">Technical SEO</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">10. The conversion of Cipher text back into readable Plain text is called:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Encryption</div>
+                    <div class="mcq-option correct"><span>B</span> Decryption</div>
+                    <div class="mcq-option"><span>C</span> Digital Signature</div>
+                    <div class="mcq-option"><span>D</span> Security Check</div>
+                </div>
+                <div class="a-text">Decryption</div>
+            </div>
+        </div>
+
+        <!-- ================= Q4: MCQ Two Correct ================= -->
+        <div class="question-section animated-section delay-3">
+            <div class="section-title">Q.4 MCQ - Two Correct Answers (10 Marks)</div>
+
+            <div class="q-block">
+                <div class="q-text">1. Image maps are generally divided into which two types?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Network side</div>
+                    <div class="mcq-option correct"><span>B</span> Client Side</div>
+                    <div class="mcq-option"><span>C</span> Computer side</div>
+                    <div class="mcq-option correct"><span>D</span> Server Side</div>
+                    <div class="mcq-option"><span>E</span> N-computing</div>
+                </div>
+                <div class="a-text">Client Side, Server Side</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">2. A standard CSS rule set contains which of the following two parts?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Set</div>
+                    <div class="mcq-option correct"><span>B</span> Selector</div>
+                    <div class="mcq-option"><span>C</span> Post</div>
+                    <div class="mcq-option correct"><span>D</span> Declaration Block</div>
+                    <div class="mcq-option"><span>E</span> Body</div>
+                </div>
+                <div class="a-text">Selector, Declaration Block</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">3. Valid approaches of identifying keywords in digital marketing are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Long tail</div>
+                    <div class="mcq-option correct"><span>B</span> Short tail</div>
+                    <div class="mcq-option"><span>C</span> Small tail</div>
+                    <div class="mcq-option"><span>D</span> Big tail</div>
+                    <div class="mcq-option"><span>E</span> Lengthy tail</div>
+                </div>
+                <div class="a-text">Long tail, Short tail</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">4. Encryption consists of which two core processes?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Encryption</div>
+                    <div class="mcq-option"><span>B</span> Signature</div>
+                    <div class="mcq-option correct"><span>C</span> Decryption</div>
+                    <div class="mcq-option"><span>D</span> Digitization</div>
+                    <div class="mcq-option"><span>E</span> Security</div>
+                </div>
+                <div class="a-text">Encryption, Decryption</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">5. Social commerce heavily involves social media platforms like:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Facebook</div>
+                    <div class="mcq-option correct"><span>B</span> Instagram</div>
+                    <div class="mcq-option"><span>C</span> Gmail</div>
+                    <div class="mcq-option"><span>D</span> Hardware</div>
+                    <div class="mcq-option"><span>E</span> Software</div>
+                </div>
+                <div class="a-text">Facebook, Instagram</div>
+            </div>
+        </div>
+
+        <!-- ================= Q5: MCQ Three Correct ================= -->
+        <div class="question-section animated-section delay-4">
+            <div class="section-title">Q.5 MCQ - Three Correct Answers (6 Marks)</div>
+
+            <div class="q-block">
+                <div class="q-text">1. What are the valid attributes used with the &lt;area&gt; tag?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> href</div>
+                    <div class="mcq-option"><span>B</span> src</div>
+                    <div class="mcq-option correct"><span>C</span> coords</div>
+                    <div class="mcq-option"><span>D</span> data</div>
+                    <div class="mcq-option correct"><span>E</span> alt</div>
+                    <div class="mcq-option"><span>F</span> usemap</div>
+                </div>
+                <div class="a-text">href, coords, alt</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">2. Which of the following are major advantages of E-governance?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Reduced corruption</div>
+                    <div class="mcq-option correct"><span>B</span> High transparency</div>
+                    <div class="mcq-option"><span>C</span> High setup cost</div>
+                    <div class="mcq-option correct"><span>D</span> Increased convenience</div>
+                    <div class="mcq-option"><span>E</span> Lack of personal touch</div>
+                    <div class="mcq-option"><span>F</span> Goods delivery issues</div>
+                </div>
+                <div class="a-text">Reduced corruption, High transparency, Increased convenience</div>
+            </div>
+        </div>
+
+        <!-- ================= Q6: Match the Following ================= -->
+        <div class="question-section animated-section delay-4">
+            <div class="section-title">Q.6 Match the Following (4 Marks)</div>
+            
+            <div class="q-block">
+                <div class="match-row">
+                    <div class="match-left">1. &lt;ul&gt;</div>
+                    <div class="match-icon">➔</div>
+                    <div class="match-right">Bulleted list</div>
+                </div>
+                <div class="match-row">
+                    <div class="match-left">2. Crawler</div>
+                    <div class="match-icon">➔</div>
+                    <div class="match-right">Spider collecting data</div>
+                </div>
+                <div class="match-row">
+                    <div class="match-left">3. M-commerce</div>
+                    <div class="match-icon">➔</div>
+                    <div class="match-right">E-bill payment via smartphones</div>
+                </div>
+                <div class="match-row">
+                    <div class="match-left">4. Cipher Text</div>
+                    <div class="match-icon">➔</div>
+                    <div class="match-right">Coded, non-readable form of data</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= Q7: Answer the Following ================= -->
+        <div class="question-section animated-section delay-5">
+            <div class="section-title">Q.7 Answer the Following - Any 5 (10 Marks)</div>
+
+            <div class="q-block">
+                <div class="q-text">1. What is E-commerce?</div>
+                <div class="a-text">E-Commerce can be broadly defined as the process of buying and selling of goods or services using an electronic medium such as the Internet. It functions as a paperless exchange of business information.</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">2. What is Digital Marketing?</div>
+                <div class="a-text">Digital marketing involves using digital devices, the internet, social media, search engines, and other channels to reach consumers. It acts similarly to traditional advertising but specifically targets audiences online where they spend most of their time.</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">3. Explain any two types of CSS styling methods.</div>
+                <div class="a-text">1) Inline CSS: Used to apply styling to a single specific line or element using the 'style' attribute. <br><br>2) Internal (Embedded) CSS: Written inside the &lt;style&gt; tag within the &lt;head&gt; section to format an entire single document or page.</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">4. Describe the process of Encryption.</div>
+                <div class="a-text">Encryption is the process used to protect sensitive user information sent over the internet. It converts Plain Text (readable form of data) into Cipher Text (coded, non-readable form). This ensures that intercepted data cannot be understood by unauthorized third parties.</div>
+            </div>
+
+            <div class="q-block">
+                <div class="q-text">5. Differentiate between Long tail and Short tail keywords.</div>
+                <div class="a-text">A Short tail keyword is brief, broad, and highly competitive (e.g., "shoes"), making it hard to rank top on search engines. A Long tail keyword is a more specific phrase (e.g., "Brown Soft Comfortable Running shoes"), which has less competition and targets a very specific audience, helping rank the website higher.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Created by Gagan Nishad
+    </footer>
+
+    <!-- Interactive Navigation Script -->
+    <script>
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Close the menu if user clicks outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chapter 2 - Digital Marketing</title>
+    <style>
+        /* Premium Lightest Orange / Peach Theme */
+        :root {
+            --bg-page: #FFF9F5; 
+            --nav-bg: rgba(255, 255, 255, 0.85); 
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --orange-soft: #FFF0E6; 
+            --divider: rgba(255, 107, 0, 0.15);
+            --correct-bg: #F0FAF0;
+            --correct-text: #228B22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.5;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--orange-primary);
+            letter-spacing: -0.01em;
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2.5px;
+            width: 100%;
+            background-color: var(--orange-primary);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: left center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 75px;
+            right: 20px;
+            width: 250px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--divider);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transform-origin: top right;
+            transform: scale(0.9) translateY(-15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+        }
+
+        .mobile-menu.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:active, .mobile-menu a:hover {
+            background-color: var(--orange-light);
+            color: var(--orange-primary);
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .animated-section {
+            opacity: 0;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 18px;
+            border: 1px solid var(--divider);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .page-header h2 {
+            font-size: 16px;
+            color: var(--orange-primary);
+            font-weight: 600;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-divider {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--orange-primary);
+            margin: 50px 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px dashed var(--divider);
+            padding-bottom: 10px;
+        }
+
+        /* Question Cards */
+        .qa-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--divider);
+            overflow: hidden;
+        }
+
+        .qa-card h3 {
+            font-size: 20px;
+            color: var(--orange-primary);
+            border-bottom: 1px solid var(--divider);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qa-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(0,0,0,0.06);
+        }
+
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .a-text {
+            background-color: var(--correct-bg);
+            color: var(--correct-text);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 4px solid var(--correct-text);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .ans-badge {
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-right: 5px;
+        }
+
+        /* MCQ Options Grid */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-option {
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .mcq-option span {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 8px;
+        }
+
+        /* Match the Following Layout */
+        .match-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .match-left {
+            font-weight: 700;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .match-icon {
+            color: var(--orange-primary);
+            font-size: 20px;
+            margin: 0 15px;
+        }
+
+        .match-right {
+            color: var(--text-muted);
+            flex: 1.5;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        /* Light Theme Code Block for Q7 (If needed) */
+        pre.light-code {
+            background-color: var(--orange-soft);
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            overflow-x: auto;
+            border: 1px solid var(--divider);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--divider);
+            font-weight: 500;
+            margin-top: auto;
+            background-color: var(--card-bg);
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 24px; }
+            .match-container { flex-direction: column; text-align: center; gap: 8px; }
+            .match-right { text-align: center; }
+            .match-icon { transform: rotate(90deg); margin: 5px 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Blurred Sticky Navigation Header -->
+    <nav>
+        <div class="nav-brand">Information Technology</div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Floating iOS Popup Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" onclick="toggleMenu()">Syllabus & Pattern</a>
+            <a href="chapter1.html" onclick="toggleMenu()">Chapter 1</a>
+            <a href="chapter2.html" style="color: var(--orange-primary);" onclick="toggleMenu()">Chapter 2</a>
+            <a href="chapter4.html" onclick="toggleMenu()">Chapter 4</a>
+            <a href="paper1.html" onclick="toggleMenu()">Practice Paper 1</a>
+            <a href="paper2.html" onclick="toggleMenu()">Practice Paper 2</a>
+            <a href="paper3.html" onclick="toggleMenu()">Practice Paper 3</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        
+        <div class="page-header animated-section delay-1">
+            <h1>Chapter 2: Digital Marketing</h1>
+            <h2>Comprehensive Textbook Exercises</h2>
+        </div>
+
+        <!-- ================= EXERCISES SECTION ================= -->
+        
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Unpaid search is nothing but ______ search.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Organic</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Program used by search engines to collect data from the website is called as ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Crawler</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Manipulating Google's algorithm to improve website rankings is ______ hat SEO.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Black</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Web analytics service offered by Google to tracks and reports website traffic is ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Google Analytics</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 State whether True or False</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Digital Marketing requires physical market.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. E commerce deals are carried out in physical market.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Digital marketing is carried out with the help of Portal.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. In Digital marketing SEO means Special Executive Operations.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. The paid advertisement on Google can be identified with 'paid' keyword.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. To make the Traffic analysis SEO Technique is used.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.3 MCQ (Single Correct Answer)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. ______ SEO relies on manipulating Google's algorithm to improve rankings.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> Red Hat</div>
+                    <div class="mcq-option"><span>b)</span> White Hat</div>
+                    <div class="mcq-option"><span>c)</span> Green Hat</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> Black Hat</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) Black Hat</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. To analyze the traffic coming to the Website ______ tool is used.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> SEO optimer</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> Google analytics</div>
+                    <div class="mcq-option"><span>c)</span> Go daddy</div>
+                    <div class="mcq-option"><span>d)</span> Amazon</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Google analytics</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. If the speed of displaying the website is slow then ______ ranking method is used.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> technical</div>
+                    <div class="mcq-option"><span>b)</span> on page</div>
+                    <div class="mcq-option"><span>c)</span> off page</div>
+                    <div class="mcq-option"><span>d)</span> load page</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) technical</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. ______ and ______ techniques and strategies are used to get higher search rankings on search engines.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> White Hat</div>
+                    <div class="mcq-option"><span>b)</span> Red Hat</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> Black Hat</div>
+                    <div class="mcq-option"><span>d)</span> Green Hat</div>
+                    <div class="mcq-option"><span>e)</span> Blue Hat</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) White Hat, c) Black Hat</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. The product of Google analytics was originally developed by ______ company in year ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> Urchin</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> 2005</div>
+                    <div class="mcq-option"><span>c)</span> Google</div>
+                    <div class="mcq-option"><span>d)</span> 2008</div>
+                    <div class="mcq-option"><span>e)</span> Microsoft</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Urchin, b) 2005</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Valid two types of keywords are ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> long tail</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> short tail</div>
+                    <div class="mcq-option"><span>c)</span> small tail</div>
+                    <div class="mcq-option"><span>d)</span> big tail</div>
+                    <div class="mcq-option"><span>e)</span> lengthy tail</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) long tail, b) short tail</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.5 MCQ (Three Correct Answers)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Marketing Channels in Digital Marketing are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> Email marketing</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> Content marketing</div>
+                    <div class="mcq-option"><span>c)</span> Valid marketing</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> Mobile marketing</div>
+                    <div class="mcq-option"><span>e)</span> on page marketing</div>
+                    <div class="mcq-option"><span>f)</span> off page marketing</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Email marketing, b) Content marketing, d) Mobile marketing</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Valid approaches SEO to generate traffic to your website are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> on-page SEO</div>
+                    <div class="mcq-option"><span>b)</span> all-page SEO</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> off-page SEO</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> technical SEO</div>
+                    <div class="mcq-option"><span>e)</span> with-page SEO</div>
+                    <div class="mcq-option"><span>f)</span> online-page SEO</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) on-page SEO, c) off-page SEO, d) technical SEO</div>
+            </div>
+        </div>
+
+
+        <hr style="border:0; height:1px; background:var(--divider); margin: 50px 0;">
+
+        <!-- ================= SECTION 2: PREDICTIVE PRACTICE PAPER ================= -->
+        <div class="section-divider">Predictive Practice Paper</div>
+        <div class="page-header animated-section delay-1" style="background-color: #FFF0E0; border-color: var(--orange-primary);">
+            <h1 style="color: var(--orange-primary);">Chapter 2 Only Test</h1>
+            <h2 style="color: var(--text-main);">Max Marks: 50 | Time: 2 Hrs</h2>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Unpaid search is nothing but ______ search.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Organic</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. ______ is the process of boosting content and technical set-up of the website.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> SEO (Search Engine Optimization)</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Program used by search engines to collect data from the website is called a ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Crawler</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. ______ SEO involves looking for ways to improve user experience ethically.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> White Hat</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Web analytics service offered by Google to track and report website traffic is ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Google Analytics</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 True or False [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Digital Marketing requires a physical market.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. SEO stands for Special Executive Operations.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Black hat SEO relies on manipulating algorithms to improve rankings.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. The paid advertisement on Google can be identified with the 'Ad' or 'Sponsored' keyword.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. A long tail keyword is a short keyword used for broad, generic search results.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.3 MCQ (Single Correct Answer) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. SEO stands for:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Search Engine Optimization</div>
+                    <div class="mcq-option">b) Special Executive Operations</div>
+                    <div class="mcq-option">c) Social Entity Optimization</div>
+                    <div class="mcq-option">d) System Engine Operations</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Search Engine Optimization</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Which of these is a channel in Digital Marketing?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Print Ads</div>
+                    <div class="mcq-option">b) Billboards</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Email Marketing</div>
+                    <div class="mcq-option">d) Posters</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) Email Marketing</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. What does PPC stand for?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Page-Per-Click</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Pay-Per-Click</div>
+                    <div class="mcq-option">c) Post-Per-Click</div>
+                    <div class="mcq-option">d) Price-Per-Click</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Pay-Per-Click</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Which SEO relies on manipulating Google's algorithm?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Red Hat</div>
+                    <div class="mcq-option">b) White Hat</div>
+                    <div class="mcq-option">c) Green Hat</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Black Hat</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) Black Hat</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Site speed optimization falls under:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Technical SEO</div>
+                    <div class="mcq-option">b) On-Page SEO</div>
+                    <div class="mcq-option">c) Off-Page SEO</div>
+                    <div class="mcq-option">d) Content Marketing</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Technical SEO</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. Which tool performs a detailed SEO Analysis?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) SEOptimer</div>
+                    <div class="mcq-option">b) Google Analytics</div>
+                    <div class="mcq-option">c) Go Daddy</div>
+                    <div class="mcq-option">d) Amazon</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) SEOptimer</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. The purchasing funnel consists of Acquisition, Behavior, and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Consideration</div>
+                    <div class="mcq-option">b) Communication</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Conversion</div>
+                    <div class="mcq-option">d) Customer</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) Conversion</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">8. Google Analytics was originally acquired from which company?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Urchin</div>
+                    <div class="mcq-option">b) YouTube</div>
+                    <div class="mcq-option">c) Microsoft</div>
+                    <div class="mcq-option">d) Facebook</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Urchin</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">9. Which tags are necessary for both usability and SEO?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Footer Tags</div>
+                    <div class="mcq-option">b) Form Tags</div>
+                    <div class="mcq-option">c) Script Tags</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Heading Tags</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) Heading Tags</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">10. To analyze the traffic coming to the Website ______ tool is used.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) SEOptimer</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Google Analytics</div>
+                    <div class="mcq-option">c) Webmaster</div>
+                    <div class="mcq-option">d) Crawler</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Google Analytics</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Valid types of keywords are ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) long tail</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) short tail</div>
+                    <div class="mcq-option">c) small tail</div>
+                    <div class="mcq-option">d) big tail</div>
+                    <div class="mcq-option">e) lengthy tail</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) long tail, b) short tail</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Types of SEO approaches to generate traffic:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) On-Page SEO</div>
+                    <div class="mcq-option">b) Inline SEO</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Off-Page SEO</div>
+                    <div class="mcq-option">d) Out-Page SEO</div>
+                    <div class="mcq-option">e) Internal SEO</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) On-Page SEO, c) Off-Page SEO</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Google Analytics tracks metrics such as:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Code errors</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Bounce Rate</div>
+                    <div class="mcq-option">c) CSS syntax</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Session Duration</div>
+                    <div class="mcq-option">e) Broken Links</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Bounce Rate, d) Session Duration</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Social media platforms include:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Facebook</div>
+                    <div class="mcq-option">b) SEOptimer</div>
+                    <div class="mcq-option">c) Google Analytics</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Twitter</div>
+                    <div class="mcq-option">e) Urchin</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Facebook, d) Twitter</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. ______ and ______ techniques are used to get higher search rankings.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) White Hat</div>
+                    <div class="mcq-option">b) Red Hat</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) Black Hat</div>
+                    <div class="mcq-option">d) Green Hat</div>
+                    <div class="mcq-option">e) Blue Hat</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) White Hat, c) Black Hat</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.5 MCQ (Three Correct Answers) [6 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Marketing Channels in Digital Marketing are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Email marketing</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Content marketing</div>
+                    <div class="mcq-option">c) Valid marketing</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Mobile marketing</div>
+                    <div class="mcq-option">e) on page marketing</div>
+                    <div class="mcq-option">f) off page marketing</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Email marketing, b) Content marketing, d) Mobile marketing</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Valid approaches to SEO to generate traffic to your website are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) on-page SEO</div>
+                    <div class="mcq-option">b) all-page SEO</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) off-page SEO</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) technical SEO</div>
+                    <div class="mcq-option">e) with-page SEO</div>
+                    <div class="mcq-option">f) online-page SEO</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) on-page SEO, c) off-page SEO, d) technical SEO</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.6 Match the Following [4 Marks]</h3>
+            <div class="match-container">
+                <div class="match-left">1. Organic Search</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">Unpaid search results</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">2. Crawler</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">Spider collecting data</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">3. Black Hat</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">Manipulating algorithms</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">4. Bounce Rate</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">Visitors hitting back button without interaction</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.7 Answer the Following (Any 5) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. What is Digital Marketing?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Digital marketing is the use of the internet, mobile devices, social media, search engines, and other digital channels to reach consumers. It is similar to traditional advertising but utilizes digital devices.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Explain White Hat SEO.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> White hat SEO involves looking for ways to improve user experience ethically and genuinely. It ensures that web page content is created for the users and not just to manipulate search engines.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Explain the term 'Bounce Rate'.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Bounce rate is a metric in Google Analytics that calculates how many visitors hit the back button or close the website without performing a single interaction (like clicking a link) on the page.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. What are the three stages of the purchasing funnel?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The purchasing funnel consists of three stages: 1) Acquisition (creating interest), 2) Behavior (watching videos, clicking descriptions), and 3) Conversion (the user actually becomes a customer).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Name any four Digital Marketing channels.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Four channels include: 1) Search Engine Optimization (SEO), 2) Email Marketing, 3) Content Marketing, and 4) Social Media Marketing.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. Differentiate between Long tail and Short tail keywords.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> A short tail keyword is broad and highly competitive (e.g., "shoes"). A long tail keyword is a longer, more specific phrase (e.g., "Brown Soft Comfortable Running shoes"), which has less competition and helps rank higher.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. What is Technical SEO?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Technical SEO is the process of optimizing backend website elements so search engines can crawl and index them effectively. Examples include improving page load speed and ensuring mobile-friendliness.</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Created by Gagan Nishad
+    </footer>
+
+    <!-- Interactive Navigation Script -->
+    <script>
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Close the menu if user clicks outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

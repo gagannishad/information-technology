@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Chapter 1 - Advanced Web Designing</title>
+    <style>
+        /* Premium Lightest Orange / Peach Theme */
+        :root {
+            --bg-page: #FFF9F5; 
+            --nav-bg: rgba(255, 255, 255, 0.85); 
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --orange-soft: #FFF0E6; /* Light theme for code boxes */
+            --divider: rgba(255, 107, 0, 0.15);
+            --correct-bg: #F0FAF0;
+            --correct-text: #228B22;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.5;
+            font-weight: 400;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Animations --- */
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--orange-primary);
+            letter-spacing: -0.01em;
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2.5px;
+            width: 100%;
+            background-color: var(--orange-primary);
+            border-radius: 3px;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform-origin: left center;
+        }
+
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: absolute;
+            top: 75px;
+            right: 20px;
+            width: 250px;
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.12), 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--divider);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transform-origin: top right;
+            transform: scale(0.9) translateY(-15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1001;
+        }
+
+        .mobile-menu.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .mobile-menu a:active, .mobile-menu a:hover {
+            background-color: var(--orange-light);
+            color: var(--orange-primary);
+            transform: translateX(5px);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .animated-section {
+            opacity: 0;
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+            background-color: var(--card-bg);
+            padding: 30px 20px;
+            border-radius: 18px;
+            border: 1px solid var(--divider);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.05);
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .page-header h2 {
+            font-size: 16px;
+            color: var(--orange-primary);
+            font-weight: 600;
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-divider {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--orange-primary);
+            margin: 50px 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px dashed var(--divider);
+            padding-bottom: 10px;
+        }
+
+        /* Question Cards */
+        .qa-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--divider);
+            overflow: hidden;
+        }
+
+        .qa-card h3 {
+            font-size: 20px;
+            color: var(--orange-primary);
+            border-bottom: 1px solid var(--divider);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .qa-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed rgba(0,0,0,0.06);
+        }
+
+        .qa-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .a-text {
+            background-color: var(--correct-bg);
+            color: var(--correct-text);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            border-left: 4px solid var(--correct-text);
+            display: inline-block;
+            width: 100%;
+        }
+
+        .ans-badge {
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-right: 5px;
+        }
+
+        /* MCQ Options Grid */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-option {
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .mcq-option span {
+            font-weight: 700;
+            color: var(--text-main);
+            margin-right: 8px;
+        }
+
+        /* Match the Following Layout */
+        .match-container {
+            display: flex;
+            justify-content: space-between;
+            background-color: var(--bg-page);
+            border: 1px solid var(--divider);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .match-left {
+            font-weight: 700;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .match-icon {
+            color: var(--orange-primary);
+            font-size: 20px;
+            margin: 0 15px;
+        }
+
+        .match-right {
+            color: var(--text-muted);
+            flex: 1.5;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        /* Light Theme Code Block for Q7 */
+        pre.light-code {
+            background-color: var(--orange-soft);
+            color: var(--text-main);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            overflow-x: auto;
+            border: 1px solid var(--divider);
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border-top: 1px solid var(--divider);
+            font-weight: 500;
+            margin-top: auto;
+            background-color: var(--card-bg);
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .page-header h1 { font-size: 24px; }
+            .match-container { flex-direction: column; text-align: center; gap: 8px; }
+            .match-right { text-align: center; }
+            .match-icon { transform: rotate(90deg); margin: 5px 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Blurred Sticky Navigation Header -->
+    <nav>
+        <div class="nav-brand">Information Technology</div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Floating iOS Popup Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="index.html" onclick="toggleMenu()">Syllabus & Pattern</a>
+            <a href="chapter1.html" style="color: var(--orange-primary);" onclick="toggleMenu()">Chapter 1</a>
+            <a href="chapter2.html" onclick="toggleMenu()">Chapter 2</a>
+            <a href="chapter4.html" onclick="toggleMenu()">Chapter 4</a>
+            <a href="paper1.html" onclick="toggleMenu()">Practice Paper 1</a>
+            <a href="paper2.html" onclick="toggleMenu()">Practice Paper 2</a>
+            <a href="paper3.html" onclick="toggleMenu()">Practice Paper 3</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        
+        <div class="page-header animated-section delay-1">
+            <h1>Chapter 1: Advanced Web Designing</h1>
+            <h2>Comprehensive Textbook Exercises</h2>
+        </div>
+
+        <!-- ================= EXERCISES SECTION ================= -->
+        
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks</h3>
+            <div class="qa-item">
+                <div class="q-text">1. The ______ element is a staring element in an HTML, it indicates that document type definition being used by the document.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;!DOCTYPE html&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. The ______ is a tag in html that describe some aspects of contents of a webpage.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;meta&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. The &lt;ol&gt; tag defines an ______.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> ordered list</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. An unordered list is created using the ______ tag.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;ul&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. The ______ element creates an inline frame.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;iframe&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. ______ tag is used to specify video on an HTML document.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;video&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. If a web developer wants to add the description to an image he must use ______ attribute of &lt;img&gt; tag.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> alt</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">8. The ______ property is used to set position for an element.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> position</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">9. The float property defines the ______ of content.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> flow</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">10. ______ is used with elements that overlap with each other.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> z-index</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 State whether True or False</h3>
+            <div class="qa-item">
+                <div class="q-text">1. HTML is an Object Oriented Programming Language.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Charset is used for character encoding declaration.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. An unordered list can be numerical or alphabetical.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Multilevel list can be created in HTML 5.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Srccode specifies the HTML content of the page to show in the &lt;iframe&gt;.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. The 'controls' attribute is not used to add play, pause, and volume.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. .cs is the extension of CSS file.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.3 MCQ (Single Correct Answer)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. ______ element used to create a linking image.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> &lt;img&gt;</div>
+                    <div class="mcq-option"><span>b)</span> &lt;td&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> &lt;map&gt;</div>
+                    <div class="mcq-option"><span>d)</span> &lt;usemap&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) &lt;map&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. ______ tag is used to embed audio files on Webpages.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> &lt;sound&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> &lt;audio&gt;</div>
+                    <div class="mcq-option"><span>c)</span> &lt;video&gt;</div>
+                    <div class="mcq-option"><span>d)</span> &lt;embeded&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) &lt;audio&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. A programmer wants to define range for age between 18 to 50, he will use a form with following appropriate control.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> number</div>
+                    <div class="mcq-option"><span>b)</span> compare</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> range</div>
+                    <div class="mcq-option"><span>d)</span> Textboxes</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) range</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. ______ character is used to create id in CSS.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> %</div>
+                    <div class="mcq-option"><span>b)</span> $</div>
+                    <div class="mcq-option"><span>c)</span> @</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> #</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) #</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. List within another list either ______ list or ______ list is called nested list.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> multilevel</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> order</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> unordered</div>
+                    <div class="mcq-option"><span>d)</span> general</div>
+                    <div class="mcq-option"><span>e)</span> cascading</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) order, c) unordered</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Image maps are of two types ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> Network side</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> Client Side</div>
+                    <div class="mcq-option"><span>c)</span> Computer side</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> Server Side</div>
+                    <div class="mcq-option"><span>e)</span> n-computing</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Client Side, d) Server Side</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. A CSS rule set contains ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>a)</span> Set</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> selector</div>
+                    <div class="mcq-option"><span>c)</span> post</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> declaration block</div>
+                    <div class="mcq-option"><span>e)</span> &lt; &gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) selector, d) declaration block</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Client-side image map can be created using two elements ______ and ______.</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> &lt;area&gt;</div>
+                    <div class="mcq-option"><span>b)</span> &lt;image&gt;</div>
+                    <div class="mcq-option"><span>c)</span> &lt;usemap&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> &lt;map&gt;</div>
+                    <div class="mcq-option"><span>e)</span> &lt;server&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) &lt;area&gt;, d) &lt;map&gt;</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.5 MCQ (Three Correct Answers)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Attributes of &lt;area&gt; tag are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> href</div>
+                    <div class="mcq-option"><span>b)</span> src</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> coords</div>
+                    <div class="mcq-option"><span>d)</span> data</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>e)</span> alt</div>
+                    <div class="mcq-option"><span>f)</span> usemap</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) href, c) coords, e) alt</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Attributes used with iframe are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> srcdoc</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> name</div>
+                    <div class="mcq-option"><span>c)</span> att</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> src</div>
+                    <div class="mcq-option"><span>e)</span> href</div>
+                    <div class="mcq-option"><span>f)</span> loop</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) srcdoc, b) name, d) src</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Following are Form controls:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> email</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> search</div>
+                    <div class="mcq-option"><span>c)</span> label</div>
+                    <div class="mcq-option"><span>d)</span> video</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>e)</span> tel</div>
+                    <div class="mcq-option"><span>f)</span> audio</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) email, b) search, e) tel</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Attributes used with &lt;audio&gt; tag:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> autoplay</div>
+                    <div class="mcq-option"><span>b)</span> href</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> controls</div>
+                    <div class="mcq-option"><span>d)</span> cntrl</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>e)</span> loop</div>
+                    <div class="mcq-option"><span>f)</span> bgsound</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) autoplay, c) controls, e) loop</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. CSS types are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> internal</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> external</div>
+                    <div class="mcq-option"><span>c)</span> control</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>d)</span> inline</div>
+                    <div class="mcq-option"><span>e)</span> loop</div>
+                    <div class="mcq-option"><span>f)</span> style</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) internal, b) external, d) inline</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. Positioning types in CSS are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> Static</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>b)</span> fixed</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> absolute</div>
+                    <div class="mcq-option"><span>d)</span> position</div>
+                    <div class="mcq-option"><span>e)</span> dynamic</div>
+                    <div class="mcq-option"><span>f)</span> nested</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Static, b) fixed, c) absolute</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. Types of floating properties are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>a)</span> left</div>
+                    <div class="mcq-option"><span>b)</span> zero</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>c)</span> right</div>
+                    <div class="mcq-option"><span>d)</span> all</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);"><span>e)</span> none</div>
+                    <div class="mcq-option"><span>f)</span> dock</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) left, c) right, e) none</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.6 Match the Following</h3>
+            
+            <div class="match-container">
+                <div class="match-left">1. &lt;ul&gt;</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">c) bulleted list</div>
+            </div>
+            
+            <div class="match-container">
+                <div class="match-left">2. usemap</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">a) Client side image map</div>
+            </div>
+
+            <div class="match-container">
+                <div class="match-left">3. color</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">b) CSS Property</div>
+            </div>
+
+            <div class="match-container">
+                <div class="match-left">4. &lt;Img&gt;</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">e) inserts an image</div>
+            </div>
+
+            <div class="match-container">
+                <div class="match-left">5. &lt;Input type=image&gt;</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">d) Image as a submit button</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.7 Answer the Following (HTML/CSS Codes)</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Write a program using HTML with CSS specification: background green, text red, comic sans ms font.</div>
+                <pre class="light-code">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style&gt;
+h1 {
+  background-color: green;
+  color: red;
+  font-family: "Comic Sans MS";
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Company Name&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Form to accept name, age, email address with a submit button.</div>
+                <pre class="light-code">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+&lt;form&gt;
+  Name: &lt;input type="text" name="n"&gt;&lt;br&gt;
+  Age: &lt;input type="number" name="a"&gt;&lt;br&gt;
+  Email: &lt;input type="email" name="e"&gt;&lt;br&gt;
+  &lt;input type="submit" value="Submit"&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Create ordered list with names of tourist Cities, unordered list with tourist places, and divide list into left and right using CSS.</div>
+                <pre class="light-code">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;style&gt;
+  .left { float: left; width: 50%; }
+  .right { float: right; width: 50%; }
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="left"&gt;
+    &lt;h3&gt;Tourist Cities&lt;/h3&gt;
+    &lt;ol&gt;
+      &lt;li&gt;Pune&lt;/li&gt;
+      &lt;li&gt;Delhi&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/div&gt;
+  &lt;div class="right"&gt;
+    &lt;h3&gt;Tourist Places&lt;/h3&gt;
+    &lt;ul&gt;
+      &lt;li&gt;Shanivarwada&lt;/li&gt;
+      &lt;li&gt;Red Fort&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+            </div>
+        </div>
+
+        <div class="section-divider">Predictive Practice Paper</div>
+        <div class="page-header animated-section delay-1" style="background-color: #FFF0E0; border-color: var(--orange-primary);">
+            <h1 style="color: var(--orange-primary);">Chapter 1 Only Test</h1>
+            <h2 style="color: var(--text-main);">Max Marks: 50 | Time: 2 Hrs</h2>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.1 Fill in the blanks [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. An unordered list is created using the ______ tag.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;ul&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. The float property defines the ______ of content.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> flow</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. The ______ element creates an inline frame.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;iframe&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. ______ tag is used to specify video on an HTML document.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> &lt;video&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. The ______ property is used to set position for an element.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> position</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-2">
+            <h3>Q.2 True or False [5 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. HTML is an Object Oriented Programming Language.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Charset is used for character encoding declaration.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> True</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. An unordered list can be numerical or alphabetical.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. The 'controls' attribute is not used to add play, pause, and volume.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. .cs is the extension of CSS file.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> False</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.3 MCQ (Single Correct Answer) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Which tag creates a linking image?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) &lt;img&gt;</div>
+                    <div class="mcq-option">b) &lt;td&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) &lt;map&gt;</div>
+                    <div class="mcq-option">d) &lt;usemap&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) &lt;map&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Which tag embeds audio?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) &lt;sound&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) &lt;audio&gt;</div>
+                    <div class="mcq-option">c) &lt;video&gt;</div>
+                    <div class="mcq-option">d) &lt;media&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) &lt;audio&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. Which character creates an ID in CSS?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) %</div>
+                    <div class="mcq-option">b) $</div>
+                    <div class="mcq-option">c) @</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) #</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> d) #</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. The input type to define a date picker is:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) time</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) date</div>
+                    <div class="mcq-option">c) month</div>
+                    <div class="mcq-option">d) search</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) date</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Which attribute specifies that an input field must be filled out?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) disabled</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) required</div>
+                    <div class="mcq-option">c) placeholder</div>
+                    <div class="mcq-option">d) min</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) required</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. CSS stands for:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) Cascading Style Sheets</div>
+                    <div class="mcq-option">b) Computer Style Sheets</div>
+                    <div class="mcq-option">c) Colorful Style Sheets</div>
+                    <div class="mcq-option">d) Creative Style Sheets</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) Cascading Style Sheets</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. The universal selector is represented by:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) .</div>
+                    <div class="mcq-option">b) #</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) *</div>
+                    <div class="mcq-option">d) &amp;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) *</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">8. Which tag specifies a list item?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) &lt;ul&gt;</div>
+                    <div class="mcq-option">b) &lt;ol&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) &lt;li&gt;</div>
+                    <div class="mcq-option">d) &lt;dl&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) &lt;li&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">9. Which CSS property adds a border?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) padding</div>
+                    <div class="mcq-option">b) margin</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) border</div>
+                    <div class="mcq-option">d) position</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> c) border</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">10. The &lt;meta&gt; tag is placed between which tags?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) &lt;body&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) &lt;head&gt;</div>
+                    <div class="mcq-option">c) &lt;title&gt;</div>
+                    <div class="mcq-option">d) &lt;footer&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) &lt;head&gt;</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-3">
+            <h3>Q.4 MCQ (Two Correct Answers) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Nested lists involve which two types?</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) multilevel</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) order</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) unordered</div>
+                    <div class="mcq-option">d) general</div>
+                    <div class="mcq-option">e) cascading</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) order, c) unordered</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Image maps are of two types:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Network side</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) Client Side</div>
+                    <div class="mcq-option">c) Computer side</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) Server Side</div>
+                    <div class="mcq-option">e) n-computing</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) Client Side, d) Server Side</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. A CSS rule set contains:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option">a) Set</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">b) selector</div>
+                    <div class="mcq-option">c) post</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) declaration block</div>
+                    <div class="mcq-option">e) &lt; &gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> b) selector, d) declaration block</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. Client-side image map is created using elements:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) &lt;area&gt;</div>
+                    <div class="mcq-option">b) &lt;image&gt;</div>
+                    <div class="mcq-option">c) &lt;usemap&gt;</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">d) &lt;map&gt;</div>
+                    <div class="mcq-option">e) &lt;server&gt;</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) &lt;area&gt;, d) &lt;map&gt;</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. Types of CSS include:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) internal</div>
+                    <div class="mcq-option">b) control</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) external</div>
+                    <div class="mcq-option">d) style</div>
+                    <div class="mcq-option">e) loop</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) internal, c) external</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.5 MCQ (Three Correct Answers) [6 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. Attributes of &lt;area&gt; tag are:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) href</div>
+                    <div class="mcq-option">b) src</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) coords</div>
+                    <div class="mcq-option">d) data</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">e) alt</div>
+                    <div class="mcq-option">f) usemap</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) href, c) coords, e) alt</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Attributes used with &lt;audio&gt; tag:</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">a) autoplay</div>
+                    <div class="mcq-option">b) href</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">c) controls</div>
+                    <div class="mcq-option">d) cntrl</div>
+                    <div class="mcq-option" style="border-color: var(--correct-text); background: var(--correct-bg);">e) loop</div>
+                    <div class="mcq-option">f) bgsound</div>
+                </div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> a) autoplay, c) controls, e) loop</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.6 Match the Following [4 Marks]</h3>
+            <div class="match-container">
+                <div class="match-left">1. &lt;ul&gt;</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">c) bulleted list</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">2. usemap</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">a) Client side image map</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">3. color</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">b) CSS Property</div>
+            </div>
+            <div class="match-container">
+                <div class="match-left">4. &lt;Img&gt;</div>
+                <div class="match-icon">➔</div>
+                <div class="match-right">e) inserts an image</div>
+            </div>
+        </div>
+
+        <div class="qa-card animated-section delay-4">
+            <h3>Q.7 Answer the Following (Any 5) [10 Marks]</h3>
+            <div class="qa-item">
+                <div class="q-text">1. What is the use of the &lt;meta&gt; tag in HTML5?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The &lt;meta&gt; tag is an empty tag placed in the &lt;head&gt; section. It describes aspects of the webpage's contents, providing metadata like the author, description, keywords, and character encoding, which are heavily used by search engines.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">2. Explain any two types of CSS styling methods.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> 1) <b>Inline CSS:</b> Applied directly within a single HTML tag using the style attribute. 2) <b>Internal/Embedded CSS:</b> Placed inside the &lt;style&gt; tag in the head section to format a single document.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">3. List any four advanced &lt;input&gt; elements introduced in HTML5.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> Four advanced input elements are: color, date, email, and number.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">4. How is a client-side image map created? Mention the tags used.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> A client-side image map is created by using the &lt;map&gt; and &lt;area&gt; tags along with an &lt;img&gt; tag. The img tag uses the 'usemap' attribute to point to the name of the map, and the area tag defines clickable hotspots using shape and coords.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">5. What is the difference between an ordered list and an unordered list?</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> An ordered list uses the &lt;ol&gt; tag and numbers its items sequentially (1, 2, 3 or a, b, c). An unordered list uses the &lt;ul&gt; tag and marks its items with bullets (circles, squares, discs).</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">6. Explain the purpose of the &lt;iframe&gt; tag.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The &lt;iframe&gt; tag is used to create an inline frame. It is heavily used to embed another HTML document, video, or online advertisement seamlessly inside the current webpage.</div>
+            </div>
+            <div class="qa-item">
+                <div class="q-text">7. Name the three positioning properties available in CSS.</div>
+                <div class="a-text"><span class="ans-badge">Ans:</span> The main positioning properties in CSS are Static (default), Fixed (stays relative to the browser window), Relative (relative to its normal position), and Absolute (relative to screen/parent top-left corner).</div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        Created by Gagan Nishad
+    </footer>
+
+    <!-- Interactive Navigation Script -->
+    <script>
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        // Close the menu if user clicks outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>
