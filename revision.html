@@ -1,0 +1,1253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Complete Syllabus - IT Deep Dive</title>
+    <style>
+        /* Premium Lightest Orange / Peach Theme (Box-Free) */
+        :root {
+            --bg-page: #FFFDF9; 
+            --nav-bg: rgba(255, 253, 249, 0.95); 
+            --text-main: #1D1D1F; 
+            --text-muted: #555555;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --orange-soft: #FFF0E6; 
+            --divider: rgba(255, 107, 0, 0.2);
+            --correct-text: #198038;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.6;
+            font-weight: 400;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Navigation Header */
+        nav {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .nav-brand {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--orange-primary);
+            letter-spacing: 0.5px;
+        }
+
+        /* Hamburger Menu Icon */
+        .hamburger {
+            width: 26px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2.5px;
+            width: 100%;
+            background-color: var(--orange-primary);
+            border-radius: 3px;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hamburger.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: translateY(-8.5px) rotate(-45deg); }
+
+        /* Mobile Menu Overlay */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 40px;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+            visibility: hidden;
+        }
+
+        .mobile-menu.open {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 600;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--divider);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+        }
+
+        .mobile-menu.open a {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu a:active, .mobile-menu a:hover {
+            color: var(--orange-primary);
+        }
+
+        /* Horizontal Scrollable Filter Bar - NON-STICKY AS REQUESTED */
+        .filter-wrapper {
+            background-color: transparent;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--divider);
+            margin-bottom: 20px;
+        }
+
+        .filter-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 0 20px;
+            scrollbar-width: none; 
+        }
+        
+        .filter-container::-webkit-scrollbar { display: none; }
+
+        .filter-btn {
+            background-color: transparent;
+            border: 1px solid var(--orange-primary);
+            color: var(--orange-primary);
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--orange-light);
+        }
+
+        .filter-btn.active {
+            background-color: var(--orange-primary);
+            color: #FFFFFF;
+        }
+
+        /* Main Content Container (No Boxes) */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 20px 80px;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding-bottom: 25px;
+            border-bottom: 2px solid var(--orange-primary);
+            animation: slideUpFade 0.5s ease forwards;
+        }
+
+        .page-header h1 {
+            font-size: 38px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .page-header h2 {
+            font-size: 18px;
+            color: var(--orange-primary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        /* Filter Sections */
+        .filter-section {
+            display: none;
+            margin-bottom: 60px;
+            animation: slideUpFade 0.5s ease forwards;
+        }
+        
+        .filter-section.active-section {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 26px;
+            color: var(--orange-primary);
+            font-weight: 800;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--divider);
+        }
+
+        .chapter-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--orange-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 40px 0 20px;
+            display: inline-block;
+            background-color: var(--orange-light);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        /* Clean Question Blocks */
+        .q-block {
+            margin-bottom: 30px;
+            padding-bottom: 25px;
+            border-bottom: 1px dashed var(--divider);
+        }
+
+        .q-block:last-child {
+            border-bottom: none;
+        }
+
+        .q-text {
+            font-weight: 600;
+            font-size: 17px;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        /* Beautiful Clean Answer Text */
+        .a-text {
+            color: var(--correct-text);
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: flex-start;
+            margin-top: 10px;
+        }
+
+        .a-text::before {
+            content: "✓ Ans:";
+            font-weight: 800;
+            margin-right: 8px;
+            text-transform: uppercase;
+            font-size: 14px;
+            padding-top: 2px;
+        }
+
+        /* Citation styling */
+        .cite {
+            font-size: 12px;
+            color: #A0A0A0;
+            font-weight: normal;
+            margin-left: 5px;
+            user-select: none;
+        }
+
+        /* MCQ Options Grid */
+        .mcq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .mcq-option {
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+        }
+
+        .mcq-option span {
+            font-weight: 800;
+            color: var(--text-main);
+            margin-right: 12px;
+            background-color: rgba(0,0,0,0.05);
+            width: 26px;
+            height: 26px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-size: 12px;
+        }
+
+        .mcq-option.correct {
+            border: 1px solid var(--correct-text);
+            color: var(--text-main);
+            background-color: rgba(25, 128, 56, 0.05);
+        }
+
+        .mcq-option.correct span {
+            background-color: var(--correct-text);
+            color: #fff;
+        }
+
+        /* Clean Match the Following */
+        .match-row {
+            display: flex;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px dashed var(--divider);
+        }
+
+        .match-row:last-child { border-bottom: none; }
+        .match-left { font-weight: 700; color: var(--text-main); flex: 1; font-size: 16px; }
+        .match-icon { color: var(--orange-primary); font-size: 20px; margin: 0 20px; opacity: 0.6; }
+        .match-right { color: var(--correct-text); flex: 1.5; font-weight: 600; font-size: 16px; }
+
+        /* Code Blocks */
+        pre.light-code {
+            background-color: var(--orange-soft);
+            color: var(--text-main);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: "SFMono-Regular", monospace;
+            overflow-x: auto;
+            border: 1px solid var(--divider);
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+
+        footer { 
+            text-align: center; 
+            padding: 30px; 
+            font-size: 15px; 
+            color: var(--text-muted); 
+            border-top: 1px solid var(--divider); 
+            font-weight: 500; 
+            margin-top: auto; 
+        }
+
+        @media (max-width: 600px) {
+            .match-row { flex-direction: column; align-items: flex-start; gap: 8px; padding: 15px 0;}
+            .match-icon { display: none; }
+            .match-right { padding-left: 15px; border-left: 2px solid var(--correct-text); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Animated Navigation -->
+    <nav>
+        <div class="nav-brand">Information Technology</div>
+        <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" onclick="toggleMenu()">Home</a>
+        <a href="#fib" onclick="toggleMenu()">Fill in the Blanks</a>
+        <a href="#tf" onclick="toggleMenu()">True or False</a>
+        <a href="#mcq" onclick="toggleMenu()">Multiple Choice</a>
+        <a href="#predict" onclick="toggleMenu()">Predicted Paper</a>
+    </div>
+
+    <!-- Interactive Filter Bar (Non-Sticky as requested) -->
+    <div class="filter-wrapper">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterQuestions('all')">All Material</button>
+            <button class="filter-btn" onclick="filterQuestions('fib')">Fill in the Blanks</button>
+            <button class="filter-btn" onclick="filterQuestions('tf')">True or False</button>
+            <button class="filter-btn" onclick="filterQuestions('mcq1')">Single MCQ</button>
+            <button class="filter-btn" onclick="filterQuestions('mcq2')">Double MCQ</button>
+            <button class="filter-btn" onclick="filterQuestions('mcq3')">Triple MCQ</button>
+            <button class="filter-btn" onclick="filterQuestions('match')">Match the Following</button>
+            <button class="filter-btn" onclick="filterQuestions('qa')">Question & Answers</button>
+            <button class="filter-btn" onclick="filterQuestions('predict')">Predict Paper (50M)</button>
+        </div>
+    </div>
+
+    <main>
+        <div class="page-header">
+            <h1>Complete Syllabus</h1>
+            <h2>Ultimate Deep Dive: Chapters 1, 2 & 4</h2>
+        </div>
+
+        <!-- ==========================================
+             1. FILL IN THE BLANKS (Massive Extraction)
+        =========================================== -->
+        <div class="filter-section active-section" id="fib">
+            <div class="section-title">Fill in the Blanks - Exhaustive Bank</div>
+            
+            <span class="chapter-label">Chapter 1: Advanced Web Designing</span>
+            <div class="q-block">
+                <div class="q-text">1. HTML5 introduces a number of new input type values for the type attribute of ______ tag.[cite: 9]</div>
+                <div class="a-text">&lt;input&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">2. The HTML5 tag &lt;input type="_____"&gt; defines a color picker.[cite: 9]</div>
+                <div class="a-text">color[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">3. The HTML5 tag &lt;input type="_____"&gt; defines a field for entering a URL.[cite: 9]</div>
+                <div class="a-text">url[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">4. The HTML5 tag &lt;input type="_____"&gt; defines an image as a submit button.[cite: 9]</div>
+                <div class="a-text">image[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">5. To pick a year, month, and day, the input type used is _____.[cite: 9]</div>
+                <div class="a-text">date[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">6. The input type that defines a range control with a default range of 0 to 100 is _____.[cite: 9]</div>
+                <div class="a-text">range[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">7. The input type _____ defines a control for entering a time.[cite: 9]</div>
+                <div class="a-text">time[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">8. To enter a telephone number, the input type _____ should be used.[cite: 9]</div>
+                <div class="a-text">tel[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">9. The input restriction attribute _____ specifies that an input field should be disabled.[cite: 9]</div>
+                <div class="a-text">disabled[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">10. The _____ attribute specifies the maximum value for an input field.[cite: 9]</div>
+                <div class="a-text">max[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">11. A regular expression to check input values is specified by the _____ attribute.[cite: 9]</div>
+                <div class="a-text">pattern[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">12. The _____ attribute specifies that an input field cannot be changed.[cite: 9]</div>
+                <div class="a-text">read only[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">13. The _____ acts as a temporary label showing the purpose of a text field without requiring a label tag.[cite: 9]</div>
+                <div class="a-text">placeholder[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">14. The _____ attribute specifies whether a form or input field should have autocomplete On or Off.[cite: 9]</div>
+                <div class="a-text">autocomplete[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">15. The _____ attribute specifies that the user is allowed to enter more than one value in the &lt;input&gt; element.[cite: 9]</div>
+                <div class="a-text">multiple[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">16. The _____ attribute is used to identify the html element uniquely through the document object model.[cite: 9]</div>
+                <div class="a-text">id[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">17. The _____ tag is used by search engines to search information that is provided with the webpage.[cite: 9]</div>
+                <div class="a-text">&lt;meta&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">18. The meta tag is placed between the &lt;head&gt; and ______ tags.[cite: 9]</div>
+                <div class="a-text">&lt;/head&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">19. The meta attribute _____ specifies the character encoding used by the document.[cite: 9]</div>
+                <div class="a-text">charset[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">20. CSS stands for _____ Style Sheets.[cite: 9]</div>
+                <div class="a-text">Cascading[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">21. A CSS rule set contains a _____ and a declaration block.[cite: 9]</div>
+                <div class="a-text">selector[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">22. The _____ CSS type uses the style attribute in the HTML start tag.[cite: 9]</div>
+                <div class="a-text">Inline[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">23. The ID selector is written with a _____ character followed by the id name.[cite: 9]</div>
+                <div class="a-text">hash (#)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">24. The class selector is used with a _____ character followed by the class name.[cite: 9]</div>
+                <div class="a-text">period (.)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">25. The _____ selector is used as a wildcard character to select all elements.[cite: 9]</div>
+                <div class="a-text">Universal (*)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">26. In CSS, commas are used to separate each selector in _____.[cite: 9]</div>
+                <div class="a-text">grouping[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">27. Static positioning is the _____ position for HTML elements.[cite: 9]</div>
+                <div class="a-text">by-default[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">28. The _____ property defines the flow of content (left, right, or none).[cite: 9]</div>
+                <div class="a-text">float[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">29. The &lt;ol&gt; tag defines an _____ list.[cite: 9]</div>
+                <div class="a-text">ordered[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">30. An unordered list created using the &lt;ul&gt; tag starts each list item with the _____ tag.[cite: 9]</div>
+                <div class="a-text">&lt;li&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">31. In a definition list &lt;dl&gt;, the _____ tag is used to define the term.[cite: 9]</div>
+                <div class="a-text">&lt;dt&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">32. The _____ tag is used to embed audio files on Webpages.[cite: 9]</div>
+                <div class="a-text">&lt;audio&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">33. The HTML ______ tag is used to embed video into your web page.[cite: 9]</div>
+                <div class="a-text">&lt;video&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">34. Image maps are used to connect links to different regions on the webpage, making regions clickable called ______.[cite: 9]</div>
+                <div class="a-text">hotspots[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">35. A client side image map uses the _____ attribute of the &lt;img&gt; tag.[cite: 9]</div>
+                <div class="a-text">usemap[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 2: Digital Marketing</span>
+            <div class="q-block">
+                <div class="q-text">36. ______ marketing is similar to traditional advertising, but using digital devices.[cite: 9]</div>
+                <div class="a-text">Digital[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">37. ______ is the process of boosting content and technical set-up of the website so that it appears at the top of search results.[cite: 9]</div>
+                <div class="a-text">SEO (Search Engine Optimization)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">38. Paid search advertising is also known as ______ advertising.[cite: 9]</div>
+                <div class="a-text">pay-per-click (PPC)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">39. ______ marketing denotes the creation and promotion of content assets like blogs and videos.[cite: 9]</div>
+                <div class="a-text">Content[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">40. ______ marketing is the use of social media platforms and websites to promote a product or service.[cite: 9]</div>
+                <div class="a-text">Social Media[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">41. The search results are generally presented in a line of results often referred to as ______.[cite: 9]</div>
+                <div class="a-text">SERPs (Search Engine Results Pages)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">42. Unpaid search results are also referred to as ______ search.[cite: 9]</div>
+                <div class="a-text">Organic[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">43. A ______ is a program used by search engines to collect data from the website.[cite: 9]</div>
+                <div class="a-text">Crawler[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">44. ______ SEO involves looking for ways to improve user experience ethically and genuinely.[cite: 9]</div>
+                <div class="a-text">White hat[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">45. ______ SEO relies on manipulating Google's algorithm to improve rankings unethically.[cite: 9]</div>
+                <div class="a-text">Black hat[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">46. The text inside the ______ tags tells browsers and search engines how to render the information.[cite: 9]</div>
+                <div class="a-text">&lt;&gt;[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">47. Site speed and mobile friendliness are examples of ______ SEO.[cite: 9]</div>
+                <div class="a-text">Technical[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">48. A ______ tail keyword is a long keyword that is very specific.[cite: 9]</div>
+                <div class="a-text">long[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">49. The ______ Tool helps to find out what could be done to improve ranking on search engines.[cite: 9]</div>
+                <div class="a-text">SEO Audit[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">50. Adding an ______ text to images improves accessibility and chance of ranking high in image search.[cite: 9]</div>
+                <div class="a-text">alt[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">51. ______ are links that are directed towards your website from other websites.[cite: 9]</div>
+                <div class="a-text">Backlinks[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">52. The ______ file tells the search engines which pages to access and index on your website.[cite: 9]</div>
+                <div class="a-text">Robots.txt[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">53. A ______ is a visual representation of your website shown on a browser tab.[cite: 9]</div>
+                <div class="a-text">Favicon[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">54. The purchasing funnel consists of three stages: Acquisition, Behavior, and ______.[cite: 9]</div>
+                <div class="a-text">Conversion[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">55. Web analytics service offered by Google to tracks and reports website traffic is ______.[cite: 9]</div>
+                <div class="a-text">Google Analytics[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 4: E-Commerce & E-Governance</span>
+            <div class="q-block">
+                <div class="q-text">56. E-Commerce stands for ______ Commerce.[cite: 9]</div>
+                <div class="a-text">Electronic[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">57. Traditional commerce provides face-to-face interaction, while E-commerce provides ______ to face interaction.[cite: 9]</div>
+                <div class="a-text">screen[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">58. E-commerce's scope is ______, whereas traditional commerce is local.[cite: 9]</div>
+                <div class="a-text">global[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">59. A customer can shop ______, meaning at any time day and night.[cite: 9]</div>
+                <div class="a-text">24x7[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">60. In the ______ model, business sells its products to an intermediate buyer who then sells to the final customer.[cite: 9]</div>
+                <div class="a-text">Business to Business (B2B)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">61. In the ______ model, a consumer helps another consumer to sell their assets like residential property or cars.[cite: 9]</div>
+                <div class="a-text">Consumer to Consumer (C2C)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">62. The comparison of interest rates provided by various banks is an example of the ______ model.[cite: 9]</div>
+                <div class="a-text">Consumer-to-Business (C2B)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">63. The Pre-Sales phase of the trade cycle consists of two steps: Search and ______.[cite: 9]</div>
+                <div class="a-text">Negotiate[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">64. The Execution phase consists of Order and ______.[cite: 9]</div>
+                <div class="a-text">Delivery[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">65. The Settlement phase consists of Invoice and ______.[cite: 9]</div>
+                <div class="a-text">Payment[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">66. A(n) ______ is a type of pre-paid electronic account used for online transactions.[cite: 9]</div>
+                <div class="a-text">E-wallet[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">67. ______ is the buying and selling of goods and services through wireless handheld devices.[cite: 9]</div>
+                <div class="a-text">M-Commerce (Mobile commerce)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">68. ______ commerce is the use of networking websites such as Facebook, Instagram and Twitter to promote and sell products.[cite: 9]</div>
+                <div class="a-text">Social[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">69. The electronic interchange of business information using a standardized format is called ______.[cite: 9]</div>
+                <div class="a-text">EDI (Electronic Data Interchange)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">70. E-governance delivers ______ government (Simple, Moral, Accessible, Responsive, Transparent).[cite: 9]</div>
+                <div class="a-text">SMART[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">71. Services like license renewals and paying tax online fall under the ______ type of e-governance.[cite: 9]</div>
+                <div class="a-text">G2C (Government-to-Citizen)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">72. Applying for leave online is an example of ______ services.[cite: 9]</div>
+                <div class="a-text">G2E (Government-to-Employee)[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">73. ______ India is a campaign launched by the Government of India to make services available electronically.[cite: 9]</div>
+                <div class="a-text">Digital[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">74. Encryption converts Plain text into ______, which is a coded form of data.[cite: 9]</div>
+                <div class="a-text">Cipher Text[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">75. A Digital ______ is an electronic "password" that allows secure data exchange using PKI.[cite: 9]</div>
+                <div class="a-text">Certificate[cite: 9]</div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             2. TRUE OR FALSE
+        =========================================== -->
+        <div class="filter-section" id="tf">
+            <div class="section-title">True or False - Exhaustive Verification</div>
+
+            <span class="chapter-label">Chapter 1</span>
+            <div class="q-block"><div class="q-text">76. The HTML5 tag &lt;input type="tel"&gt; is used to define input fields that should contain a telephone number.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">77. The 'disabled' attribute specifies that an input field should be read only.[cite: 9]</div><div class="a-text">False (It disables the field)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">78. The &lt;meta&gt; tag metadata is visibly displayed on the webpage for users to read.[cite: 9]</div><div class="a-text">False (Metadata will not be displayed on the webpage)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">79. An external style sheet can be written in any text editor and must be saved with a .css extension.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">80. The grouping selector is used to maximize the code length.[cite: 9]</div><div class="a-text">False (It is used to minimize the code)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">81. Relative Positioning sets an element relative to its normal position.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">82. HTML5 supports bullets, circles, and squares values directly in the type attribute of the &lt;ul&gt; tag.[cite: 9]</div><div class="a-text">False (Use CSS style instead in HTML5)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">83. The &lt;iframe&gt; element creates an inline frame.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">84. Shared hosting is the most expensive way to publish your website.[cite: 9]</div><div class="a-text">False (It is cost-effective)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">85. A client side image map is created by marking regions clickable called hotspots.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+
+            <span class="chapter-label">Chapter 2</span>
+            <div class="q-block"><div class="q-text">86. Digital marketing is a completely new concept that started only 5 years ago.[cite: 9]</div><div class="a-text">False (It has been around since the Internet started)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">87. Purchasing decisions often begin online today.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">88. With paid search (PPC), you only pay when your ad is clicked.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">89. Search engines look at a page exactly the way a human person looks at it.[cite: 9]</div><div class="a-text">False (They can only read the source code)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">90. Site speed and mobile friendliness are examples of Technical SEO.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">91. A short tail keyword usually has less competition than a long tail keyword.[cite: 9]</div><div class="a-text">False (Short tail has higher competition)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">92. Flash content helps improve your search engine rankings significantly.[cite: 9]</div><div class="a-text">False (Flash can kill search rankings as engines can't index it directly)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">93. Bounce rate calculates how many visitors hit the back button without performing a single interaction.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">94. The Google Analytics was developed originally by Microsoft.[cite: 9]</div><div class="a-text">False (Acquired from Urchin in 2005)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">95. Backlinks are links that are directed towards your website.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+
+            <span class="chapter-label">Chapter 4</span>
+            <div class="q-block"><div class="q-text">96. Traditional commerce focuses on manual, face-to-face interaction.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">97. E-commerce restricts shoppers to business hours, mostly during the day.[cite: 9]</div><div class="a-text">False (It is 24x7)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">98. Security, such as credit card theft, remains a big concern in E-commerce.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">99. OLX and Quikr are examples of the Business to Consumer (B2C) model.[cite: 9]</div><div class="a-text">False (They are C2C)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">100. The After-Sales phase consists of Invoice and Payment.[cite: 9]</div><div class="a-text">False (That is the Settlement phase)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">101. BHIM, UPI, and Paytm are examples of Mobile Payments.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">102. Decryption converts readable plain text into non-readable cipher text.[cite: 9]</div><div class="a-text">False (Encryption does this; decryption reverses it)[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">103. G2G provides safe and secure inter-relationship between domestic or foreign governments.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">104. Digital Signature guarantees the authenticity of an electronic document.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">105. Symmetric Encryption is also known as Public-Key Encryption.[cite: 9]</div><div class="a-text">False (Asymmetric is Public-Key)[cite: 9]</div></div>
+        </div>
+
+        <!-- ==========================================
+             3. SINGLE MCQ
+        =========================================== -->
+        <div class="filter-section" id="mcq1">
+            <div class="section-title">Single Correct MCQ - Exhaustive Collection</div>
+
+            <span class="chapter-label">Chapter 1</span>
+            <div class="q-block">
+                <div class="q-text">106. Which HTML5 input type defines a text field for entering a search string?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> string</div>
+                    <div class="mcq-option correct"><span>B</span> search</div>
+                    <div class="mcq-option"><span>C</span> find</div>
+                    <div class="mcq-option"><span>D</span> text</div>
+                </div>
+                <div class="a-text">search[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">107. Which meta tag attribute value specifies the character encoding used by the document?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> name</div>
+                    <div class="mcq-option"><span>B</span> content</div>
+                    <div class="mcq-option correct"><span>C</span> charset</div>
+                    <div class="mcq-option"><span>D</span> http-equiv</div>
+                </div>
+                <div class="a-text">charset[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">108. Which CSS property adds a strike-through mark, underline, or overstrike to text?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> font-style</div>
+                    <div class="mcq-option"><span>B</span> text-align</div>
+                    <div class="mcq-option correct"><span>C</span> text-decoration</div>
+                    <div class="mcq-option"><span>D</span> letter-spacing</div>
+                </div>
+                <div class="a-text">text-decoration[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">109. Which CSS class selector syntax is correct?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> #intro</div>
+                    <div class="mcq-option correct"><span>B</span> .intro</div>
+                    <div class="mcq-option"><span>C</span> *intro</div>
+                    <div class="mcq-option"><span>D</span> &intro</div>
+                </div>
+                <div class="a-text">.intro[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">110. The attribute used to specify the video file URL in &lt;video&gt; tag is:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> href</div>
+                    <div class="mcq-option correct"><span>B</span> src</div>
+                    <div class="mcq-option"><span>C</span> url</div>
+                    <div class="mcq-option"><span>D</span> link</div>
+                </div>
+                <div class="a-text">src[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 2</span>
+            <div class="q-block">
+                <div class="q-text">111. SEO is the process of boosting content so it appears at the top of a search engine result. SEO stands for:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Search Executive Options</div>
+                    <div class="mcq-option correct"><span>B</span> Search Engine Optimization</div>
+                    <div class="mcq-option"><span>C</span> Social Engine Organization</div>
+                    <div class="mcq-option"><span>D</span> System Entity Operations</div>
+                </div>
+                <div class="a-text">Search Engine Optimization[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">112. PPC advertising refers to:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Page-Per-Click</div>
+                    <div class="mcq-option correct"><span>B</span> Pay-Per-Click</div>
+                    <div class="mcq-option"><span>C</span> Price-Per-Click</div>
+                    <div class="mcq-option"><span>D</span> Post-Per-Click</div>
+                </div>
+                <div class="a-text">Pay-Per-Click[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">113. The term used for links directed towards your website from other sites is:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Forward links</div>
+                    <div class="mcq-option"><span>B</span> Broken links</div>
+                    <div class="mcq-option correct"><span>C</span> Backlinks</div>
+                    <div class="mcq-option"><span>D</span> iFrames</div>
+                </div>
+                <div class="a-text">Backlinks[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">114. Which Google Analytics metric shows how many visitors hit the back button without interacting?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Session Duration</div>
+                    <div class="mcq-option correct"><span>B</span> Bounce Rate</div>
+                    <div class="mcq-option"><span>C</span> Active Users</div>
+                    <div class="mcq-option"><span>D</span> Conversion Rate</div>
+                </div>
+                <div class="a-text">Bounce Rate[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 4</span>
+            <div class="q-block">
+                <div class="q-text">115. Which phase of the trade cycle consists of Warranty and After Sale Services?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Pre-Sales</div>
+                    <div class="mcq-option"><span>B</span> Execution</div>
+                    <div class="mcq-option"><span>C</span> Settlement</div>
+                    <div class="mcq-option correct"><span>D</span> After-Sales</div>
+                </div>
+                <div class="a-text">After-Sales[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">116. The process of converting Cipher Text back to Plain Text is:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> Encryption</div>
+                    <div class="mcq-option correct"><span>B</span> Decryption</div>
+                    <div class="mcq-option"><span>C</span> Digitization</div>
+                    <div class="mcq-option"><span>D</span> Security Check</div>
+                </div>
+                <div class="a-text">Decryption[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">117. UMANG is a mobile application primarily related to:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> B2B commerce</div>
+                    <div class="mcq-option"><span>B</span> C2C commerce</div>
+                    <div class="mcq-option correct"><span>C</span> E-Governance</div>
+                    <div class="mcq-option"><span>D</span> HTML Editing</div>
+                </div>
+                <div class="a-text">E-Governance[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">118. Which type of web hosting is generally cost effective and gives a domain name?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Shared hosting</div>
+                    <div class="mcq-option"><span>B</span> Dedicated hosting</div>
+                    <div class="mcq-option"><span>C</span> Premium hosting</div>
+                    <div class="mcq-option"><span>D</span> Server hosting</div>
+                </div>
+                <div class="a-text">Shared hosting[cite: 9]</div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             4. DOUBLE MCQ
+        =========================================== -->
+        <div class="filter-section" id="mcq2">
+            <div class="section-title">Two Correct Answers - Exhaustive Collection</div>
+
+            <span class="chapter-label">Chapter 1</span>
+            <div class="q-block">
+                <div class="q-text">119. The CSS "display" property can have which of the following two values?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> inline</div>
+                    <div class="mcq-option"><span>B</span> clear</div>
+                    <div class="mcq-option correct"><span>C</span> block</div>
+                    <div class="mcq-option"><span>D</span> solid</div>
+                    <div class="mcq-option"><span>E</span> padding</div>
+                </div>
+                <div class="a-text">inline, block[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">120. Which two CSS positioning properties exist?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option"><span>A</span> float</div>
+                    <div class="mcq-option correct"><span>B</span> fixed</div>
+                    <div class="mcq-option correct"><span>C</span> relative</div>
+                    <div class="mcq-option"><span>D</span> clear</div>
+                    <div class="mcq-option"><span>E</span> bold</div>
+                </div>
+                <div class="a-text">fixed, relative[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 2</span>
+            <div class="q-block">
+                <div class="q-text">121. The two types of SEO strategies focusing on ethics and rules are:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> White Hat</div>
+                    <div class="mcq-option"><span>B</span> Technical</div>
+                    <div class="mcq-option correct"><span>C</span> Black Hat</div>
+                    <div class="mcq-option"><span>D</span> On-page</div>
+                    <div class="mcq-option"><span>E</span> Off-page</div>
+                </div>
+                <div class="a-text">White Hat, Black Hat[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">122. The purchasing funnel involves which two of the following stages?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Acquisition</div>
+                    <div class="mcq-option"><span>B</span> Search</div>
+                    <div class="mcq-option"><span>C</span> Payment</div>
+                    <div class="mcq-option correct"><span>D</span> Conversion</div>
+                    <div class="mcq-option"><span>E</span> Delivery</div>
+                </div>
+                <div class="a-text">Acquisition, Conversion[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 4</span>
+            <div class="q-block">
+                <div class="q-text">123. Encryption has two main types:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> Symmetric (Private-Key)</div>
+                    <div class="mcq-option"><span>B</span> Digital</div>
+                    <div class="mcq-option"><span>C</span> Open-Source</div>
+                    <div class="mcq-option correct"><span>D</span> Asymmetric (Public-Key)</div>
+                    <div class="mcq-option"><span>E</span> Cipher</div>
+                </div>
+                <div class="a-text">Symmetric, Asymmetric[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">124. Which two are valid E-commerce models?[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> B2B</div>
+                    <div class="mcq-option"><span>B</span> B2G</div>
+                    <div class="mcq-option correct"><span>C</span> C2C</div>
+                    <div class="mcq-option"><span>D</span> C2E</div>
+                    <div class="mcq-option"><span>E</span> M2C</div>
+                </div>
+                <div class="a-text">B2B, C2C[cite: 9]</div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             5. TRIPLE MCQ
+        =========================================== -->
+        <div class="filter-section" id="mcq3">
+            <div class="section-title">Three Correct Answers - Exhaustive Collection</div>
+
+            <span class="chapter-label">Chapter 1</span>
+            <div class="q-block">
+                <div class="q-text">125. Common audio formats supported by HTML5 include:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> mp3</div>
+                    <div class="mcq-option"><span>B</span> mp4</div>
+                    <div class="mcq-option correct"><span>C</span> aac</div>
+                    <div class="mcq-option"><span>D</span> docx</div>
+                    <div class="mcq-option correct"><span>E</span> ogg</div>
+                    <div class="mcq-option"><span>F</span> html</div>
+                </div>
+                <div class="a-text">mp3, aac, ogg[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">126. Attributes of the &lt;video&gt; tag include:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> poster</div>
+                    <div class="mcq-option"><span>B</span> bgsound</div>
+                    <div class="mcq-option correct"><span>C</span> preload</div>
+                    <div class="mcq-option"><span>D</span> color</div>
+                    <div class="mcq-option correct"><span>E</span> loop</div>
+                    <div class="mcq-option"><span>F</span> text-align</div>
+                </div>
+                <div class="a-text">poster, preload, loop[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 2</span>
+            <div class="q-block">
+                <div class="q-text">127. Approaches to SEO to generate traffic include:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> On-page SEO</div>
+                    <div class="mcq-option"><span>B</span> Background SEO</div>
+                    <div class="mcq-option correct"><span>C</span> Off-page SEO</div>
+                    <div class="mcq-option correct"><span>D</span> Technical SEO</div>
+                    <div class="mcq-option"><span>E</span> Design SEO</div>
+                    <div class="mcq-option"><span>F</span> Hardware SEO</div>
+                </div>
+                <div class="a-text">On-page, Off-page, Technical SEO[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 4</span>
+            <div class="q-block">
+                <div class="q-text">128. Primary models of E-Commerce include:[cite: 9]</div>
+                <div class="mcq-grid">
+                    <div class="mcq-option correct"><span>A</span> B2C</div>
+                    <div class="mcq-option"><span>B</span> G2E</div>
+                    <div class="mcq-option correct"><span>C</span> C2C</div>
+                    <div class="mcq-option"><span>D</span> G2C</div>
+                    <div class="mcq-option correct"><span>E</span> B2B</div>
+                    <div class="mcq-option"><span>F</span> G2G</div>
+                </div>
+                <div class="a-text">B2C, C2C, B2B[cite: 9]</div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             6. MATCH THE FOLLOWING
+        =========================================== -->
+        <div class="filter-section" id="match">
+            <div class="section-title">Match the Following - Exhaustive Collection</div>
+
+            <span class="chapter-label">Combined Set 1</span>
+            <div class="q-block">
+                <div class="match-row"><div class="match-left">129. &lt;dl&gt;[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Definition list[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">130. &lt;ol type="a"&gt;[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Alphabetical ordered list[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">131. srcdoc[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Specifies HTML content in iframe[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">132. float: left[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">CSS flow property[cite: 9]</div></div>
+            </div>
+
+            <span class="chapter-label">Combined Set 2</span>
+            <div class="q-block">
+                <div class="match-row"><div class="match-left">133. Content Marketing[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Blogs, E-books, Videos[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">134. Googlebot[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Google's Spider for indexing[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">135. G2B[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Government to Business[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">136. Social Commerce[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Facebook, Instagram[cite: 9]</div></div>
+            </div>
+            
+            <span class="chapter-label">Combined Set 3</span>
+            <div class="q-block">
+                <div class="match-row"><div class="match-left">137. SEOptimer[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">SEO Audit Tool[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">138. Favicon[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Website identity icon[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">139. NEFT, IMPS[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Bank Transfers[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">140. PKI[cite: 9]</div><div class="match-icon">➔</div><div class="match-right">Public key infrastructure[cite: 9]</div></div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             7. QUESTIONS AND ANSWERS (LONG FORM)
+        =========================================== -->
+        <div class="filter-section" id="qa">
+            <div class="section-title">Deep Dive: Questions & Answers</div>
+
+            <span class="chapter-label">Chapter 1</span>
+            <div class="q-block">
+                <div class="q-text">141. Write a CSS rule to set a paragraph font to Arial, text-align to center, and color to blue.[cite: 9]</div>
+                <pre class="light-code">
+p {
+  font-family: arial;
+  text-align: center;
+  color: blue;
+} /*[cite: 9] */</pre>
+            </div>
+            <div class="q-block">
+                <div class="q-text">142. Write the HTML5 code to embed an audio file named "test.mp3" with controls.[cite: 9]</div>
+                <pre class="light-code">
+&lt;audio controls&gt;
+  &lt;source src="test.mp3" type="audio/mp3"&gt;
+&lt;/audio&gt; /*[cite: 9] */</pre>
+            </div>
+            
+            <span class="chapter-label">Chapter 2</span>
+            <div class="q-block">
+                <div class="q-text">143. Define Search Engine Optimization (SEO).[cite: 9]</div>
+                <div class="a-text">SEO is the process of boosting content and technical set-up of the website so that it appears at the top of a search engine result for specific keywords, driving organic traffic.[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">144. Explain Technical SEO.[cite: 9]</div>
+                <div class="a-text">Technical SEO ensures the website meets technical requirements of search engines, like fast page load speed and mobile friendliness. Slow or unresponsive sites are ranked lower.[cite: 9]</div>
+            </div>
+
+            <span class="chapter-label">Chapter 4</span>
+            <div class="q-block">
+                <div class="q-text">145. Define E-Commerce.[cite: 9]</div>
+                <div class="a-text">E-Commerce is broadly defined as the process of buying and selling of goods or services using an electronic medium such as the Internet, acting as a paperless exchange.[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">146. What is a Digital Signature?[cite: 9]</div>
+                <div class="a-text">A digital signature guarantees the authenticity of an electronic document in digital communication, using asymmetric cryptography to prove the document is unmodified.[cite: 9]</div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             8. PREDICTED BOARD PAPER (50 MARKS)
+        =========================================== -->
+        <div class="filter-section" id="predict">
+            <div class="page-header" style="border-bottom: 2px solid var(--correct-text);">
+                <h1 style="color: var(--correct-text);">Predicted Board Paper</h1>
+                <h2>Ultimate Test (50 Marks) Based on Full Syllabus[cite: 9]</h2>
+            </div>
+            
+            <div class="section-title">Q.1 Fill in the blanks (5 Marks)</div>
+            <div class="q-block"><div class="q-text">147. The ______ tag embeds video.[cite: 9]</div><div class="a-text">&lt;video&gt;[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">148. Unpaid search is ______ search.[cite: 9]</div><div class="a-text">Organic[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">149. EDI is ______ exchange of information.[cite: 9]</div><div class="a-text">paperless[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">150. The ______ type of e-governance refers to citizen services.[cite: 9]</div><div class="a-text">G2C[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">151. The ______ property is used to set element position.[cite: 9]</div><div class="a-text">position[cite: 9]</div></div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.2 True or False (5 Marks)</div>
+            <div class="q-block"><div class="q-text">152. HTML is Object Oriented.[cite: 9]</div><div class="a-text">False[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">153. Charset encodes characters.[cite: 9]</div><div class="a-text">True[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">154. Digital marketing needs a physical portal.[cite: 9]</div><div class="a-text">False[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">155. C2C is Business and Customer.[cite: 9]</div><div class="a-text">False[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">156. M-commerce uses desktop computers.[cite: 9]</div><div class="a-text">False[cite: 9]</div></div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.3 MCQ - Single Correct (10 Marks)</div>
+            <div class="q-block"><div class="q-text">157. Tag to embed audio:[cite: 9]</div><div class="a-text">&lt;audio&gt;[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">158. Character for CSS id:[cite: 9]</div><div class="a-text">#[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">159. Manipulating algorithm SEO:[cite: 9]</div><div class="a-text">Black Hat[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">160. Phase with Invoice:[cite: 9]</div><div class="a-text">Settlement[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">161. License renewal e-gov:[cite: 9]</div><div class="a-text">G2C[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">162. Tool for website traffic:[cite: 9]</div><div class="a-text">Google analytics[cite: 9]</div></div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.4 MCQ - Two Correct (10 Marks)</div>
+            <div class="q-block"><div class="q-text">163. List types for nested list:[cite: 9]</div><div class="a-text">order, unordered[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">164. CSS rule set contains:[cite: 9]</div><div class="a-text">selector, declaration block[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">165. SEO strategy types:[cite: 9]</div><div class="a-text">White Hat, Black Hat[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">166. Encryption processes:[cite: 9]</div><div class="a-text">encryption, decryption[cite: 9]</div></div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.5 MCQ - Three Correct (6 Marks)</div>
+            <div class="q-block"><div class="q-text">167. CSS types:[cite: 9]</div><div class="a-text">internal, external, inline[cite: 9]</div></div>
+            <div class="q-block"><div class="q-text">168. E-governance advantages:[cite: 9]</div><div class="a-text">Reduced corruption, High transparency, Increased convenience[cite: 9]</div></div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.6 Match the Following (4 Marks)</div>
+            <div class="q-block">
+                <div class="match-row"><div class="match-left">169. &lt;ul&gt;[cite: 9]</div><div class="match-right">bulleted list[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">170. color[cite: 9]</div><div class="match-right">CSS Property[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">171. M-commerce[cite: 9]</div><div class="match-right">E-bill payment[cite: 9]</div></div>
+                <div class="match-row"><div class="match-left">172. EDI[cite: 9]</div><div class="match-right">Paperless exchange[cite: 9]</div></div>
+            </div>
+
+            <div class="section-title" style="margin-top: 40px;">Q.7 Answer the Following (10 Marks)</div>
+            <div class="q-block">
+                <div class="q-text">173. Explain phases of trade cycle.[cite: 9]</div>
+                <div class="a-text">Phases are: Pre-Sales (Search and Negotiate), Execution (Order and Delivery), Settlement (Invoice and Payment), and After-Sales (Warranty and Maintenance).[cite: 9]</div>
+            </div>
+            <div class="q-block">
+                <div class="q-text">174. Describe process of encryption.[cite: 9]</div>
+                <div class="a-text">Encryption converts Plain text into Cipher Text to protect data. Decryption converts it back. Types include Symmetric and Asymmetric.[cite: 9]</div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        Mega Exhaustive Syllabus Deep Dive - Created for Maximum Preparation
+    </footer>
+
+    <script>
+        function filterQuestions(category) {
+            // Update active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter sections
+            const sections = document.querySelectorAll('.filter-section');
+            sections.forEach(sec => {
+                if (category === 'all') {
+                    sec.classList.add('active-section');
+                    sec.style.animation = 'none';
+                    sec.offsetHeight; 
+                    sec.style.animation = 'slideUpFade 0.5s ease forwards';
+                } else {
+                    if (sec.id === category) {
+                        sec.classList.add('active-section');
+                        sec.style.animation = 'none';
+                        sec.offsetHeight; 
+                        sec.style.animation = 'slideUpFade 0.5s ease forwards';
+                    } else {
+                        sec.classList.remove('active-section');
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Hamburger Menu Logic
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>
