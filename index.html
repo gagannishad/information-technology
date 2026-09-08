@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- TOTAL LOCKOUT: Disables zooming and scaling completely -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>Information Technology | Best of Luck</title>
+    <meta name="theme-color" content="#FEF4EE">
+
+    <!-- Fonts and Icons for Animation Phase -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind for Phase 1 Alignment -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* =========================================
+           GLOBAL SECURITY & CSS RESET
+           ========================================= */
+        :root {
+            --bg-page: #FFF9F5; 
+            --nav-bg: rgba(255, 255, 255, 0.85); 
+            --card-bg: #FFFFFF;
+            --text-main: #1D1D1F; 
+            --text-muted: #86868B;
+            --orange-primary: #FF6B00; 
+            --orange-light: rgba(255, 107, 0, 0.08);
+            --divider: rgba(255, 107, 0, 0.15);
+        }
+
+        *, *::before, *::after { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            -webkit-tap-highlight-color: transparent;
+            /* Prevent Text Selection */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        a { -webkit-user-drag: none; }
+
+        body {
+            width: 100%; 
+            min-height: 100vh;
+            overflow: hidden; /* Locked initially for Phase 1 */
+            touch-action: none; /* Prevent scroll initially */
+            background-color: #FEF4EE;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Poppins", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            transition: background-color 1.5s ease;
+        }
+
+        /* Applied when 10 seconds are up to allow scrolling */
+        body.phase2-active {
+            display: block;
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            touch-action: pan-y !important;
+        }
+
+        /* =========================================
+           PHASE 1: ANIMATION WAITING SCREEN
+           ========================================= */
+        /* Curtains - They only open and stay open */
+        .slide-panel {
+            position: fixed; top: 0; width: 50.5vw; height: 100vh; z-index: 100;
+            background: linear-gradient(to bottom, #FFB347 0%, #EB5E28 50%, #D64B16 100%);
+            transition: transform 1.8s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 0 0 30px rgba(235, 94, 40, 0.4);
+        }
+        #panel-left { left: 0; transform-origin: left; border-right: 3px solid #FFF5F2; }
+        #panel-right { right: 0; transform-origin: right; border-left: 3px solid #FFF5F2; }
+        
+        body.opened #panel-left { transform: translateX(-100%); }
+        body.opened #panel-right { transform: translateX(100%); }
+
+        /* Main Glass Box */
+        #mainBox {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 50;
+        }
+        
+        body.opened #mainBox { 
+            opacity: 1; 
+            transform: translate(-50%, -50%) scale(1); 
+        }
+
+        .glass-box {
+            background: #FFFFFF;
+            box-shadow: 0 20px 50px rgba(235, 94, 40, 0.15), 0 0 0 8px rgba(255, 245, 242, 0.6);
+            width: 92vw; max-width: 550px;
+            min-height: 440px;
+            padding: 2.5rem 2rem;
+            border-radius: 2rem;
+            text-align: center;
+            border: 1px solid #F2E4DC;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .timer-ring {
+            background: conic-gradient(#EB5E28 0deg 180deg, #FFB347 180deg 360deg);
+            padding: 6px; 
+            border-radius: 50%;
+            margin: 20px auto;
+        }
+
+        /* Animations */
+        .pulse-timer { animation: pulse 1s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.15); color: #EB5E28; } }
+        
+        .anim-float { animation: floatLevitate 4s ease-in-out infinite; }
+        @keyframes floatLevitate { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+
+        .spin-icon i { animation: flipSpin 3s infinite ease-in-out; }
+        @keyframes flipSpin { 0% { transform: rotate(0deg); } 40%, 60% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
+
+        .shimmer-text {
+            background: linear-gradient(to right, #111111 20%, #EB5E28 50%, #111111 80%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 3s linear infinite;
+        }
+        @keyframes shine { to { background-position: 200% center; } }
+
+        /* Hidden Quote Transition */
+        #quoteSection {
+            opacity: 0; max-height: 0; overflow: hidden;
+            transform: scale(0.95);
+            transition: opacity 1s ease-in-out, max-height 1s ease-in-out, margin-top 1s ease-in-out, transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #quoteSection.visible {
+            opacity: 1; max-height: 200px; margin-top: 1.5rem; transform: scale(1);
+        }
+
+        canvas { position: fixed; inset: 0; z-index: 5; pointer-events: none; }
+
+        /* =========================================
+           PHASE 2: MAIN IT WEBSITE
+           ========================================= */
+        #mainContent {
+            display: none; /* Hidden until 10 seconds are up */
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes pulseSoft {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 8px rgba(255, 107, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 0, 0); }
+        }
+        @keyframes floatCard {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+
+        nav {
+            position: sticky; top: 0; width: 100%; height: 65px;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 24px; z-index: 1000;
+            border-bottom: 1px solid var(--divider);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04); 
+            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .nav-brand { font-size: 20px; font-weight: 700; color: var(--orange-primary); letter-spacing: -0.01em; }
+        .hamburger { width: 24px; height: 18px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; z-index: 1002; }
+        .hamburger span { display: block; height: 2.5px; width: 100%; background-color: var(--orange-primary); border-radius: 3px; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: left center; }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(1px, -1px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(1px, 1px); }
+
+        .mobile-menu {
+            position: absolute; top: 75px; right: 20px; width: 250px;
+            background-color: var(--card-bg); border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(255, 107, 0, 0.15), 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--divider); padding: 10px; display: flex; flex-direction: column;
+            transform-origin: top right; transform: scale(0.8) translateY(-20px); opacity: 0; visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1001;
+        }
+        .mobile-menu.open { transform: scale(1) translateY(0); opacity: 1; visibility: visible; }
+        .mobile-menu a {
+            text-decoration: none; color: var(--text-main); font-size: 16px; font-weight: 600;
+            padding: 12px 16px; border-radius: 10px; transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        .mobile-menu a:active, .mobile-menu a:hover { background-color: var(--orange-light); color: var(--orange-primary); transform: translateX(5px); }
+
+        .main-wrapper { max-width: 800px; margin: 0 auto; padding: 40px 24px; flex: 1; width: 100%; }
+
+        .hero-card, .section-syllabus, .section-pattern, .guidance-section { opacity: 0; animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .hero-card { animation-delay: 0.1s; } .section-syllabus { animation-delay: 0.3s; }
+        .section-pattern { animation-delay: 0.5s; } .guidance-section { animation-delay: 0.7s; }
+
+        .hero-card {
+            background-color: var(--card-bg); border-radius: 20px; padding: 40px 30px; text-align: center; margin-bottom: 50px;
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.08); border: 1px solid var(--divider);
+            animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards, floatCard 6s ease-in-out infinite alternate;
+        }
+        .college-name { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 15px; }
+        .hero-card h1 { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 5px; color: var(--text-main); }
+        .hero-card h2 { font-size: 26px; font-weight: 600; color: var(--orange-primary); margin-bottom: 20px; }
+        .exam-info { font-size: 18px; font-weight: 500; color: var(--text-main); margin-bottom: 15px; }
+        .exam-date { display: inline-block; background-color: var(--orange-light); color: var(--orange-primary); font-size: 15px; font-weight: 700; padding: 10px 20px; border-radius: 30px; animation: pulseSoft 2.5s infinite; }
+
+        section { margin-bottom: 50px; }
+        .section-title { font-size: 26px; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--divider); }
+
+        .ios-list { list-style: none; width: 100%; background-color: var(--card-bg); border-radius: 16px; padding: 0 20px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); border: 1px solid var(--divider); overflow: hidden; }
+        .ios-list li { display: flex; justify-content: space-between; align-items: center; padding: 18px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); font-size: 16px; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease; cursor: default; }
+        .ios-list li:hover { transform: translateX(8px); background-color: var(--orange-light); border-radius: 8px; }
+        .ios-list li:last-child { border-bottom: none; }
+        .list-title { font-weight: 500; flex: 1; transition: color 0.3s ease; }
+        .ios-list li:hover .list-title { color: var(--orange-primary); }
+        .list-value { color: var(--orange-primary); font-weight: 600; text-align: right; flex: 1; line-height: 1.4; padding-left: 20px; }
+
+        .meta-info { display: flex; justify-content: space-between; font-size: 15px; color: var(--text-muted); margin-bottom: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 5px; }
+
+        .guidance-section { background-color: transparent; margin-top: 30px; }
+        .nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 15px; }
+        .nav-card { background-color: var(--card-bg); border: 1px solid var(--divider); border-radius: 16px; padding: 20px 10px; text-align: center; text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(255, 107, 0, 0.03); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden; }
+        .nav-card:hover, .nav-card:active { transform: translateY(-5px) scale(1.02); border-color: var(--orange-primary); color: var(--orange-primary); box-shadow: 0 12px 25px rgba(255, 107, 0, 0.15); }
+
+        footer { text-align: center; padding: 24px; font-size: 15px; color: var(--text-muted); border-top: 1px solid var(--divider); font-weight: 500; margin-top: auto; background-color: var(--card-bg); animation: slideUpFade 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.9s; }
+    </style>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+
+    <!-- ================= PHASE 1: WAITING SCREEN ================= -->
+    <!-- Curtains (These will open and NEVER close) -->
+    <div id="panel-left" class="slide-panel"></div>
+    <div id="panel-right" class="slide-panel"></div>
+    
+    <!-- Fireworks -->
+    <canvas id="fireworksCanvas"></canvas>
+
+    <!-- Glass Box Timer (Disappears after 10s) -->
+    <div id="mainBox">
+        <div class="glass-box anim-float">
+            <div class="mb-6">
+                <div class="h-12 w-12 bg-[#FFF5F2] text-[#EB5E28] rounded-full flex items-center justify-center mb-3 mx-auto border border-[#F2E4DC] spin-icon">
+                    <i class="fa-solid fa-hourglass-half text-xl"></i>
+                </div>
+                <h1 class="text-xl font-bold mb-1 shimmer-text">
+    Dear Classmates,<br> Best of Luck for Your IT Exam!
+                </h1>
+                <p class="text-sm text-[#555555] font-medium mt-3">
+A Little Information - Please Read
+<br>
+<br>
+This portal includes textbook exercise solutions for all three chapters coming in the exam.
+<br>
+<br>
+                    Do not depend only on this portal also revise your textbook as well.
+                    
+                    <br> - Thank You
+                </p>
+            </div>
+
+            <div class="w-28 h-28 mx-auto timer-ring shadow-sm">
+                <div class="w-full h-full bg-white rounded-full flex items-center justify-center">
+                    <span id="countdownText" class="text-5xl font-bold text-[#111111] pulse-timer">10</span>
+                </div>
+            </div>
+
+            <!-- Ratan Tata Quote exactly as requested -->
+            <div id="quoteSection" class="px-5 py-4 bg-[#FFF5F2] border border-[#F2E4DC] rounded-2xl w-full">
+                <blockquote class="text-sm sm:text-base text-[#111111] font-semibold">
+                    If you want to go fast, go alone.<br>But if you want to go far, go together.
+                </blockquote>
+                <div class="mt-3 font-bold text-[#EB5E28] uppercase tracking-widest text-[11px]">— Ratan Tata</div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ================= PHASE 2: MAIN IT WEBSITE ================= -->
+    <div id="mainContent">
+        <nav>
+            <div class="nav-brand">Information Technology</div>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <div class="mobile-menu" id="mobileMenu">
+                <a href="index.html" style="color: var(--orange-primary);" onclick="toggleMenu()">Syllabus & Pattern</a>
+                <a href="chapter1.html" onclick="toggleMenu()">Chapter 1</a>
+                <a href="chapter2.html" onclick="toggleMenu()">Chapter 2</a>
+                <a href="chapter4.html" onclick="toggleMenu()">Chapter 4</a>
+                <a href="paper1.html" onclick="toggleMenu()">Practice Paper 1</a>
+                <a href="paper2.html" onclick="toggleMenu()">Practice Paper 2</a>
+                <a href="paper3.html" onclick="toggleMenu()">Practice Paper 3</a>
+            </div>
+        </nav>
+
+        <div class="main-wrapper">
+            <div class="hero-card">
+                <div class="college-name">Nirmala Memorial Foundation Junior College of Commerce and Science</div>
+                <h1>12th Commerce</h1>
+                <h2>Information Technology</h2>
+                <div class="exam-info">II<sup>nd</sup> Monthly Test Examination</div>
+                <div class="exam-date">Date: 8 September 2026</div>
+            </div>
+
+            <section class="section-syllabus">
+                <h3 class="section-title">Syllabus</h3>
+                <ul class="ios-list">
+                    <li><span class="list-title">Chapter 1</span><span class="list-value">Advanced Web Designing</span></li>
+                    <li><span class="list-title">Chapter 2</span><span class="list-value">Digital Marketing</span></li>
+                    <li><span class="list-title">Chapter 4</span><span class="list-value">E-Commerce and E-Governance</span></li>
+                </ul>
+            </section>
+
+            <section class="section-pattern">
+                <h3 class="section-title">Paper Pattern</h3>
+                <div class="meta-info">
+                    <span>Time: 2 HRS</span>
+                    <span>Marks: 50</span>
+                </div>
+                <ul class="ios-list">
+                    <li><span class="list-title">Q.1 Fill in the Blanks</span><span class="list-value">5 M</span></li>
+                    <li><span class="list-title">Q.2 True or False</span><span class="list-value">5 M</span></li>
+                    <li><span class="list-title">Q.3 MCQ (Single Correct Answer)</span><span class="list-value">10 M</span></li>
+                    <li><span class="list-title">Q.4 MCQ (Two Correct Answers)</span><span class="list-value">10 M</span></li>
+                    <li><span class="list-title">Q.5 MCQ (Three Correct Answers)</span><span class="list-value">6 M</span></li>
+                    <li><span class="list-title">Q.6 Match the Following</span><span class="list-value">4 M</span></li>
+                    <li><span class="list-title">Q.7 Answer the Following (Any 5)</span><span class="list-value">10 M</span></li>
+                </ul>
+            </section>
+
+            <section class="guidance-section">
+                <h3 class="section-title" style="font-size: 22px;">Quick Navigation</h3>
+                <div class="nav-grid">
+                    <a href="chapter1.html" class="nav-card">Chapter 1</a>
+                    <a href="chapter2.html" class="nav-card">Chapter 2</a>
+                    <a href="chapter4.html" class="nav-card">Chapter 4</a>
+                    <a href="paper1.html" class="nav-card">Practice Paper 1</a>
+                    <a href="paper2.html" class="nav-card">Practice Paper 2</a>
+                    <a href="paper3.html" class="nav-card">Practice Paper 3</a>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            Created by Gagan Nishad
+        </footer>
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // --- 1. PHASE TRANSITION & TIMER LOGIC ---
+        let currentPhase = 1;
+
+        window.addEventListener('load', () => {
+            // STEP 1: Open curtains almost immediately (They will never close back)
+            setTimeout(() => {
+                document.body.classList.add('opened');
+                startAutoFirecrackers();
+            }, 400);
+
+            // STEP 2: Start Countdown Timer for the Box
+            setTimeout(() => {
+                let timeLeft = 10; 
+                const counterEl = document.getElementById('countdownText');
+                const quoteSection = document.getElementById('quoteSection');
+                
+                const timer = setInterval(() => {
+                    timeLeft--;
+                    counterEl.innerText = timeLeft;
+                    
+                    // Show Ratan Tata quote at 6 seconds left
+                    if (timeLeft === 6) {
+                        quoteSection.classList.add('visible');
+                    }
+                    
+                    // STEP 3: Time's Up -> Fade out the glass box and reveal website
+                    if (timeLeft <= 0) {
+                        clearInterval(timer);
+                        counterEl.classList.remove('pulse-timer');
+                        currentPhase = 2; 
+                        stopAutoFirecrackers(); 
+                        
+                        const mainBox = document.getElementById('mainBox');
+                        const mainContent = document.getElementById('mainContent');
+                        const canvas = document.getElementById('fireworksCanvas');
+                        
+                        // Fade out the Glass Box ONLY (Curtains stay exactly where they are)
+                        mainBox.style.opacity = '0';
+                        mainBox.style.transform = 'translate(-50%, -50%) scale(0.8)';
+                        mainBox.style.pointerEvents = 'none';
+                        
+                        // Hide canvas so it doesn't block clicks on the website
+                        canvas.style.display = 'none';
+                        
+                        setTimeout(() => {
+                            mainBox.style.display = 'none';
+                            
+                            // IMPORTANT FIX: ADD the scrolling class, do not overwrite the opened class
+                            document.body.classList.add('phase2-active'); 
+                            document.body.style.backgroundColor = 'var(--bg-page)';
+                            
+                            // Show Main Content (IT Site)
+                            mainContent.style.display = 'block';
+                            
+                            // Trigger fade-in for the main website
+                            setTimeout(() => {
+                                mainContent.style.opacity = '1';
+                            }, 50);
+                            
+                        }, 800); 
+                    }
+                }, 1000);
+            }, 1000); 
+        });
+
+        // --- 2. FIRECRACKERS CANVAS (PHASE 1 ONLY) ---
+        const canvas = document.getElementById("fireworksCanvas");
+        const ctx = canvas.getContext("2d");
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let particles = [];
+        const colors = ["#EB5E28", "#D64B16", "#FFB347", "#FFFFFF", "#FF3366"];
+        let fireworksInterval = null;
+
+        class Particle {
+            constructor(x, y, type) {
+                this.x = x; this.y = y;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                const angle = Math.random() * Math.PI * 2;
+                let speed;
+                
+                if (type === 'tap') { speed = Math.random() * 8 + 4; this.decay = Math.random() * 0.015 + 0.01; } 
+                else if (type === 'move') { speed = Math.random() * 4 + 1; this.decay = Math.random() * 0.03 + 0.02; } 
+                else { speed = Math.random() * 6 + 2; this.decay = Math.random() * 0.02 + 0.015; }
+
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.life = 1.0;
+                this.size = Math.random() * 2.5 + 1.5;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                this.vy += 0.04; this.vx *= 0.98; this.life -= this.decay;
+            }
+            draw() {
+                ctx.save(); ctx.globalAlpha = this.life; ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color; ctx.shadowBlur = 6; ctx.shadowColor = this.color;
+                ctx.fill(); ctx.restore();
+            }
+        }
+
+        function createExplosion(x, y, type) {
+            if (currentPhase !== 1) return;
+            let particleCount = 40; 
+            if(type === 'tap') particleCount = 80;
+            if(type === 'move') particleCount = 6;
+            for (let i = 0; i < particleCount; i++) particles.push(new Particle(x, y, type));
+        }
+
+        function animate() {
+            if (currentPhase !== 1) return; 
+            ctx.fillStyle = "rgba(254, 244, 238, 0.3)"; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.update(); p.draw();
+                if (p.life <= 0) particles.splice(index, 1);
+            });
+            requestAnimationFrame(animate);
+        }
+        
+        function startAutoFirecrackers() {
+            animate();
+            fireworksInterval = setInterval(() => {
+                if (currentPhase !== 1) return;
+                const edge = Math.floor(Math.random() * 4);
+                let x, y;
+                if (edge === 0) { x = Math.random() * canvas.width; y = Math.random() * (canvas.height * 0.3); } 
+                else if (edge === 1) { x = Math.random() * canvas.width; y = canvas.height - Math.random() * (canvas.height * 0.3); } 
+                else if (edge === 2) { x = Math.random() * (canvas.width * 0.3); y = Math.random() * canvas.height; } 
+                else { x = canvas.width - Math.random() * (canvas.width * 0.3); y = Math.random() * canvas.height; }
+                createExplosion(x, y, 'auto');
+            }, 600);
+        }
+
+        function stopAutoFirecrackers() {
+            clearInterval(fireworksInterval);
+            particles = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+        }
+
+        window.addEventListener('pointerdown', (e) => {
+            if (currentPhase === 1) createExplosion(e.clientX, e.clientY, 'tap');
+        });
+        window.addEventListener('pointermove', (e) => {
+            if (currentPhase === 1 && Math.random() > 0.6) createExplosion(e.clientX, e.clientY, 'move');
+        });
+
+        // --- 3. IT WEBSITE NAVIGATION LOGIC ---
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        }
+
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const hamburger = document.getElementById('hamburger');
+            if (!mobileMenu.contains(event.target) && !hamburger.contains(event.target) && mobileMenu.classList.contains('open')) {
+                mobileMenu.classList.remove('open');
+                hamburger.classList.remove('active');
+            }
+        });
+
+        // --- 4. STRICT SECURITY & UX RESTRICTIONS ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.addEventListener('copy', event => event.preventDefault());
+        document.addEventListener('cut', event => event.preventDefault());
+        document.addEventListener('paste', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "F12" || e.keyCode === 44) {
+                e.preventDefault(); return false;
+            }
+            if (e.ctrlKey || e.metaKey) {
+                const key = e.key.toLowerCase();
+                if (['c', 'a', 'x', 'v', 'p', 'u', 's', 'i', '+', '-', '='].includes(key)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey || e.metaKey) e.preventDefault();
+        }, { passive: false });
+        
+        document.addEventListener('touchmove', function(event) {
+            if (event.scale !== 1 && event.touches.length > 1) {
+                event.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) event.preventDefault();
+            lastTouchEnd = now;
+        }, false);
+    </script>
+</body>
+</html>
